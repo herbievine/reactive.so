@@ -3,12 +3,14 @@ import type { NextPage, GetStaticPaths, GetStaticProps } from "next";
 import type React from "react";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
-import Page from "src/layouts/Page";
+import Blog from "src/layouts/Blog";
 import { TMetadata } from "@schema/metadata";
-import Credits from "src/modules/Credits";
 import rehypeSlug from "rehype-slug";
 import rehypeHighlight from "rehype-highlight";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import remarkGfm from "remark-gfm";
+import Image from "next/future/image";
+import Link from "@components/Link";
 
 interface PostProps {
   content: MDXRemoteSerializeResult<Record<string, unknown>>;
@@ -17,12 +19,11 @@ interface PostProps {
 
 const Post: NextPage<PostProps> = ({ content, metadata }) => {
   return (
-    <Page title={metadata.title}>
-      <Credits metadata={metadata} />
+    <Blog metadata={metadata}>
       <article className="prose dark:prose-invert">
-        <MDXRemote {...content} />
+        <MDXRemote {...content} components={{ Link, Image }} />
       </article>
-    </Page>
+    </Blog>
   );
 };
 
@@ -46,6 +47,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     props: {
       content: await serialize(content, {
         mdxOptions: {
+          remarkPlugins: [remarkGfm],
           rehypePlugins: [
             rehypeSlug,
             rehypeHighlight,

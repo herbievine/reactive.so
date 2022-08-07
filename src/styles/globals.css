@@ -8,3 +8,43 @@
     @apply transition-colors duration-300;
   }
 }
+
+.hljs {
+  @apply font-semibold font-mono
+}
+
+.hljs-name {
+  @apply text-red-400
+}
+
+.hljs-keyword, .hljs-type, .hljs-operator {
+  @apply text-indigo-400
+}
+
+.hljs-built_in {
+  @apply text-green-400
+}
+	
+.hljs-literal, .hljs-variable, .hljs-title.function_ {
+  @apply text-blue-400
+}
+
+.hljs-regexp {
+  @apply text-cyan-400
+}
+
+.hljs-variable, .hljs-property {
+  @apply text-teal-400
+}
+	
+.hljs-number, .hljs-title {
+  @apply text-orange-400
+}
+	
+.hljs-string, .hljs-params {
+  @apply text-yellow-400
+}
+
+.hljs-comment {
+  @apply text-gray-500
+}
