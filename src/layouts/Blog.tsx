@@ -1,5 +1,4 @@
 import { TMetadata } from "@schema/metadata";
-import { useTheme } from "next-themes";
 import Head from "next/head";
 import type React from "react";
 import { useEffect, useState } from "react";
@@ -16,7 +15,6 @@ interface BlogProps {
 
 const Blog: React.FC<BlogProps> = ({ metadata, children }) => {
   const [mounted, setMounted] = useState(false);
-  const { resolvedTheme: theme } = useTheme();
 
   useEffect(() => {
     setMounted(true);
@@ -30,6 +28,8 @@ const Blog: React.FC<BlogProps> = ({ metadata, children }) => {
     <>
       <Head>
         <title>{metadata.title} - Reactive</title>
+        <meta name="title" content={`${metadata.title} - Reactive`} />
+        <meta name="description" content={metadata.excerpt} />
       </Head>
 
       <Root>

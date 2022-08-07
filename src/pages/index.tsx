@@ -11,7 +11,10 @@ interface HomeProps {
 
 const Home: NextPage<HomeProps> = ({ posts }) => {
   return (
-    <Page title="Home">
+    <Page
+      title="Home"
+      description="Reactive is a small blog about the web. Made by Herbie Vine."
+    >
       {posts.map((post, i) => (
         <Preview key={i} metadata={post} />
       ))}

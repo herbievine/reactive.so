@@ -1,22 +1,18 @@
-import { TMetadata } from "@schema/metadata";
-import { useTheme } from "next-themes";
 import Head from "next/head";
 import type React from "react";
 import { useEffect, useState } from "react";
-import Credits from "src/modules/Credits";
 import Footer from "src/modules/Footer";
 import Header from "src/modules/Header";
-import Share from "src/modules/Share";
 import Root from "./Root";
 
 interface PageProps {
   title: string;
+  description: string;
   children: React.ReactNode;
 }
 
-const Page: React.FC<PageProps> = ({ title, children }) => {
+const Page: React.FC<PageProps> = ({ title, description, children }) => {
   const [mounted, setMounted] = useState(false);
-  const { resolvedTheme: theme } = useTheme();
 
   useEffect(() => {
     setMounted(true);
@@ -30,6 +26,8 @@ const Page: React.FC<PageProps> = ({ title, children }) => {
     <>
       <Head>
         <title>{title} - Reactive</title>
+        <meta name="title" content={`${title} - Reactive`} />
+        <meta name="description" content={description} />
       </Head>
 
       <Root>
