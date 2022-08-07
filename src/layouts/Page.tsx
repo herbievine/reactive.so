@@ -9,12 +9,12 @@ import Header from "src/modules/Header";
 import Share from "src/modules/Share";
 import Root from "./Root";
 
-interface BlogProps {
-  metadata: TMetadata;
+interface PageProps {
+  title: string;
   children: React.ReactNode;
 }
 
-const Blog: React.FC<BlogProps> = ({ metadata, children }) => {
+const Page: React.FC<PageProps> = ({ title, children }) => {
   const [mounted, setMounted] = useState(false);
   const { resolvedTheme: theme } = useTheme();
 
@@ -29,21 +29,16 @@ const Blog: React.FC<BlogProps> = ({ metadata, children }) => {
   return (
     <>
       <Head>
-        <title>{metadata.title} - Reactive</title>
+        <title>{title} - Reactive</title>
       </Head>
 
       <Root>
         <Header />
-        <div className="space-y-6">
-          <h1 className="font-black text-3xl">{metadata.title}</h1>
-          <Credits metadata={metadata} />
-          {children}
-        </div>
-        <Share metadata={metadata} />
+        <div className="space-y-6">{children}</div>
         <Footer />
       </Root>
     </>
   );
 };
 
-export default Blog;
+export default Page;

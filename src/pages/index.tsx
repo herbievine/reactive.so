@@ -1,19 +1,28 @@
 import { getAllPosts, getPost, getSlugs } from "../lib/api";
 import type { NextPage, GetStaticProps } from "next";
+import Page from "src/layouts/Page";
+import { MDXRemoteSerializeResult } from "next-mdx-remote";
+import { TMetadata } from "@schema/metadata";
+import Preview from "src/modules/Preview";
 
-const Home: NextPage = (props) => {
+interface HomeProps {
+  posts: TMetadata[];
+}
+
+const Home: NextPage<HomeProps> = ({ posts }) => {
   return (
-    <div>
-      <h1 className="text-red-500">hello world</h1>
-      {props && <pre>{JSON.stringify(props, null, 2)}</pre>}
-    </div>
+    <Page title="Home">
+      {posts.map((post, i) => (
+        <Preview key={i} metadata={post} />
+      ))}
+    </Page>
   );
 };
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {
-      posts: getAllPosts(),
+      posts: getAllPosts().map(({ post: { metadata } }) => metadata),
     },
   };
 };

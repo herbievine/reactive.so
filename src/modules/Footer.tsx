@@ -10,7 +10,7 @@ const Footer: React.FC<FooterProps> = ({}) => {
       <Heart width={20} className="fill-indigo-500 dark:fill-indigo-400" />
       <Link href="https://www.herbievine.com">
         <span className="text-sm font-extrabold cursor-pointer">
-          by herbie vine
+          a small blog by herbie vine
         </span>
       </Link>
     </div>

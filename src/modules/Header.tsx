@@ -1,4 +1,5 @@
 import { useTheme } from "next-themes";
+import Link from "next/link";
 import type React from "react";
 import Moon from "src/assets/Moon";
 import Star from "src/assets/Star";
@@ -10,9 +11,11 @@ const Header: React.FC<HeaderProps> = ({}) => {
 
   return (
     <div className="flex justify-between items-center">
-      <h2 className="font-black text-xl text-indigo-500 dark:text-indigo-400">
-        reactive
-      </h2>
+      <Link href="/">
+        <h2 className="font-black text-2xl cursor-pointer text-indigo-500 dark:text-indigo-400">
+          reactive
+        </h2>
+      </Link>
       <button
         className="p-2 rounded-lg border-2 border-indigo-500 dark:border-indigo-400 bg-gray-200 dark:bg-gray-800"
         onClick={() => setTheme(theme === "dark" ? "light" : "dark")}

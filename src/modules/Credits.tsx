@@ -13,7 +13,7 @@ const Credits: React.FC<CreditsProps> = ({ metadata }) => {
         <time dateTime={metadata.createdAt}>
           {dayjs().to(metadata.createdAt)}
         </time>
-        {` • `}
+        {" • "}
         <span>{metadata.readingTime}</span>
       </aside>
     </div>
