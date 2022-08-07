@@ -17,6 +17,7 @@ const Header: React.FC<HeaderProps> = ({}) => {
         </h2>
       </Link>
       <button
+        aria-label="theme selector"
         className="p-2 rounded-lg border-2 border-indigo-500 dark:border-indigo-400 bg-gray-200 dark:bg-gray-800"
         onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
       >
