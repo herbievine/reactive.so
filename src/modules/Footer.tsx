@@ -8,11 +8,12 @@ const Footer: React.FC<FooterProps> = ({}) => {
   return (
     <div className="flex flex-col items-center space-y-6">
       <Heart width={20} className="fill-indigo-500 dark:fill-indigo-400" />
-      <Link href="https://www.herbievine.com">
-        <span className="text-sm font-extrabold cursor-pointer">
-          a small blog by herbie vine
-        </span>
-      </Link>
+      <a
+        href="https://www.herbievine.com"
+        className="text-sm font-extrabold cursor-pointer"
+      >
+        a small blog by herbie vine
+      </a>
     </div>
   );
 };
