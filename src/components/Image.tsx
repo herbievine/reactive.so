@@ -1,5 +1,6 @@
 import type React from "react";
 import NextImage from "next/future/image";
+import getBaseUrl from "@lib/getBaseUrl";
 
 interface ImageProps
   extends React.DetailedHTMLProps<
@@ -8,7 +9,7 @@ interface ImageProps
   > {}
 
 const Image: React.FC<ImageProps> = ({ src = "", alt, width, height }) => {
-  return <NextImage {...{ src, alt, width, height }} />;
+  return <NextImage {...{ src: getBaseUrl() + src, alt, width, height }} />;
 };
 
 export default Image;

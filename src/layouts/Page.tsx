@@ -42,7 +42,7 @@ const Page: React.FC<PageProps> = ({ title, description, children }) => {
 
       <Root>
         <Header />
-        <div className="space-y-6">{children}</div>
+        <div className="space-y-10">{children}</div>
         <Footer />
       </Root>
     </>
