@@ -1,3 +1,4 @@
+import getBaseUrl from "@lib/getBaseUrl";
 import Head from "next/head";
 import type React from "react";
 import { useEffect, useState } from "react";
@@ -28,6 +29,15 @@ const Page: React.FC<PageProps> = ({ title, description, children }) => {
         <title>{title} - Reactive</title>
         <meta name="title" content={`${title} - Reactive`} />
         <meta name="description" content={description} />
+
+        <meta name="og:title" content={title} />
+        <meta name="og:description" content={description} />
+        <meta
+          name="og:image"
+          content={`${getBaseUrl()}/static/images/reactive.png`}
+        />
+        <meta property="og:url" content={getBaseUrl()}></meta>
+        <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
       <Root>

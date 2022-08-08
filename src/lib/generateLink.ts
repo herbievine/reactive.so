@@ -1,6 +1,5 @@
 import { TMetadata } from "@schema/metadata";
-
-const BLOG_URL = "https://blog.herbievine.com/post";
+import getBaseUrl from "./getBaseUrl";
 
 const BASE_LINKS = {
   twitter: {
@@ -40,7 +39,7 @@ const generateLink = (
   const url = new URL(baseLink.url);
   const data = {
     title: metadata.title,
-    url: `${BLOG_URL}/${metadata.slug}`,
+    url: `${getBaseUrl()}/post/${metadata.slug}`,
   };
 
   for (const [key] of Object.entries(baseLink.params) as [
