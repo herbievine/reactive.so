@@ -1,6 +1,11 @@
 const getBaseUrl = (): string => {
-  const { origin } = window.location;
-  return process.env.NEXT_PUBLIC_URL ?? origin;
+  if (typeof window !== "undefined") {
+    return "";
+  }
+
+  return process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : `http://localhost:${process.env.PORT ?? 3000}`;
 };
 
 export default getBaseUrl;
