@@ -4,6 +4,6 @@
 
 ### To-do
 
-- [x]: Add tRPC
+- [ ]: Add tRPC
 - [ ]: Add Revue POST `/v2/subscribers`
 - [ ]: Refactor `/lib/api.ts` into respective tRPC routes
