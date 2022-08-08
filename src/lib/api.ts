@@ -3,6 +3,7 @@ import fs from "fs";
 import { sync } from "glob";
 import matter from "gray-matter";
 import { postSchema, TPost } from "@schema/post";
+import dayjs from "dayjs";
 
 const POSTS_PATH = path.join(process.cwd(), "posts");
 
@@ -30,5 +31,9 @@ export const getPost = (
 };
 
 export const getAllPosts = () => {
-  return getSlugs().map((slug) => getPost(slug));
+  return getSlugs()
+    .map((slug) => getPost(slug))
+    .sort(({ post: { metadata: a } }, { post: { metadata: b } }) =>
+      dayjs(a.createdAt).isAfter(dayjs(b.createdAt)) ? -1 : 1
+    );
 };
