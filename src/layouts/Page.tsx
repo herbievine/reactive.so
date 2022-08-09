@@ -36,7 +36,16 @@ const Page: React.FC<PageProps> = ({ title, description, children }) => {
           name="og:image"
           content={`${getBaseUrl()}/static/images/reactive.png`}
         />
-        <meta property="og:url" content={getBaseUrl()}></meta>
+        <meta
+          name="og:image:secure_url"
+          content={`${getBaseUrl()}/static/images/reactive.png`}
+        />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:width" content="1920" />
+        <meta property="og:image:height" content="1080" />
+        <meta property="og:image:alt" content="reactive.so logo image" />
+        <meta property="og:site_name" content="reactive" />
+        <meta property="og:url" content={getBaseUrl()} />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
