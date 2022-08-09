@@ -1,7 +1,9 @@
 const getBaseUrl = (): string => {
-  return process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : `http://localhost:${process.env.PORT ?? 3000}`;
+  return (
+    process.env.HOST ??
+    process.env.NEXT_PUBLIC_URL ??
+    `http://localhost:${process.env.PORT ?? 3000}`
+  );
 };
 
 export default getBaseUrl;
