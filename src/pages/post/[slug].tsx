@@ -32,7 +32,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths: paths.map(({ slug }) => ({ params: { slug } })),
-    fallback: false,
+    fallback: "blocking",
   };
 };
 
@@ -42,6 +42,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const {
     post: { content, metadata },
   } = getPost(slug);
+
+  if (!content || !metadata) {
+    return {
+      notFound: true,
+    };
+  }
 
   return {
     props: {

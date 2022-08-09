@@ -1,5 +1,6 @@
 import { useTheme } from "next-themes";
 import type React from "react";
+import { useState, useEffect } from "react";
 
 interface RootProps {
   children: React.ReactNode;
@@ -7,6 +8,15 @@ interface RootProps {
 
 const Root: React.FC<RootProps> = ({ children }) => {
   const { resolvedTheme: theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <div className={theme}>
