@@ -9,7 +9,7 @@ interface CreditsProps {
 const Credits: React.FC<CreditsProps> = ({ metadata }) => {
   return (
     <div className="w-full flex items-center">
-      <aside>
+      <aside className="text-xs font-extrabold text-gray-500">
         <time dateTime={metadata.createdAt}>
           {dayjs().to(metadata.createdAt)}
         </time>
