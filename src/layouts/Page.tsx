@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Footer from "src/modules/Footer";
 import Header from "src/modules/Header";
 import Meta from "src/modules/Meta";
+import Newsletter from "src/modules/Newsletter";
 import Root from "./Root";
 
 interface PageProps {

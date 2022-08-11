@@ -7,6 +7,7 @@ import Credits from "src/modules/Credits";
 import Footer from "src/modules/Footer";
 import Header from "src/modules/Header";
 import Meta from "src/modules/Meta";
+import Newsletter from "src/modules/Newsletter";
 import Share from "src/modules/Share";
 import Root from "./Root";
 
