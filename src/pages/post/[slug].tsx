@@ -21,7 +21,15 @@ const Post: NextPage<PostProps> = ({ content, metadata }) => {
   return (
     <Blog metadata={metadata}>
       <article className="prose dark:prose-invert">
-        <MDXRemote {...content} components={{ Link, Image }} />
+        <MDXRemote
+          {...content}
+          components={{
+            Link,
+            Image: ({ src, alt, width = 1200, height = 630 }) => (
+              <Image src={src} alt={alt} width={width} height={height} />
+            ),
+          }}
+        />
       </article>
     </Blog>
   );
