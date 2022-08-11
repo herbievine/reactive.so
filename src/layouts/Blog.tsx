@@ -1,13 +1,10 @@
 import getBaseUrl from "@lib/getBaseUrl";
 import { TMetadata } from "@schema/metadata";
-import Head from "next/head";
 import type React from "react";
-import { useEffect, useState } from "react";
 import Credits from "src/modules/Credits";
 import Footer from "src/modules/Footer";
 import Header from "src/modules/Header";
 import Meta from "src/modules/Meta";
-import Newsletter from "src/modules/Newsletter";
 import Share from "src/modules/Share";
 import Root from "./Root";
 

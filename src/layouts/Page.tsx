@@ -1,11 +1,8 @@
 import getBaseUrl from "@lib/getBaseUrl";
-import Head from "next/head";
 import type React from "react";
-import { useEffect, useState } from "react";
 import Footer from "src/modules/Footer";
 import Header from "src/modules/Header";
 import Meta from "src/modules/Meta";
-import Newsletter from "src/modules/Newsletter";
 import Root from "./Root";
 
 interface PageProps {

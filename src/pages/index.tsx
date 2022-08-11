@@ -1,7 +1,6 @@
-import { getAllPosts, getPost, getSlugs } from "../lib/api";
+import { getAllPosts } from "../lib/api";
 import type { NextPage, GetStaticProps } from "next";
 import Page from "src/layouts/Page";
-import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { TMetadata } from "@schema/metadata";
 import Preview from "src/modules/Preview";
 
