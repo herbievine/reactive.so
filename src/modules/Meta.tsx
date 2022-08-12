@@ -23,7 +23,7 @@ const Meta: React.FC<MetaProps> = ({
 }) => {
   return (
     <Head>
-      <title>{title} - Reactive</title>
+      <title key="main:title">{title} - Reactive</title>
       <meta name="title" content={`${title} - Reactive`} key="title" />
       <meta name="description" content={description} key="description" />
 

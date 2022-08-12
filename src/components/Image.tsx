@@ -9,7 +9,12 @@ interface ImageProps
   > {}
 
 const Image: React.FC<ImageProps> = ({ src = "", alt, width, height }) => {
-  return <NextImage {...{ src: getBaseUrl() + src, alt, width, height }} />;
+  return (
+    <NextImage
+      {...{ src: getBaseUrl() + src, alt, width, height }}
+      quality={100}
+    />
+  );
 };
 
 export default Image;

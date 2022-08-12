@@ -1,7 +1,6 @@
 import { getAllPosts } from "@lib/api";
 import getBaseUrl from "@lib/getBaseUrl";
 import type { NextPage, GetServerSideProps } from "next";
-import type React from "react";
 
 interface SiteMapProps {}
 

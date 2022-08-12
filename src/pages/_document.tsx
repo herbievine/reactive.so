@@ -10,7 +10,11 @@ class MyDocument extends Document {
             content="blog, programming, javascript, typescript, react"
           />
 
-          <script defer data-domain="reactive.so" src="https://plausible.io/js/plausible.js"></script>
+          <script
+            defer
+            data-domain="reactive.so"
+            src="https://plausible.io/js/plausible.js"
+          ></script>
           <link
             href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@500;600;700;800;900&display=swap"
             rel="stylesheet"

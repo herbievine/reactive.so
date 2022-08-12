@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tanstack/react-query": "^4.0.10",
     "dayjs": "^1.11.4",
     "glob": "^8.0.3",
     "gray-matter": "^4.0.3",

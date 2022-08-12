@@ -35,5 +35,8 @@ export const getAllPosts = () => {
     .map((slug) => getPost(slug))
     .sort(({ post: { metadata: a } }, { post: { metadata: b } }) =>
       dayjs(a.createdAt).isAfter(dayjs(b.createdAt)) ? -1 : 1
+    )
+    .filter(({ post: { metadata } }) =>
+      dayjs(metadata.createdAt).isBefore(dayjs())
     );
 };
