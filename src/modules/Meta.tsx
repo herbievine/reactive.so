@@ -23,9 +23,21 @@ const Meta: React.FC<MetaProps> = ({
 }) => {
   return (
     <Head>
-      <title key="main:title">{title} - Reactive</title>
-      <meta name="title" content={`${title} - Reactive`} key="title" />
+      {/* General */}
+      <title key="main:title">
+        {title} - Reactive | A small blog by Herbie Vine
+      </title>
+      <meta
+        name="title"
+        content={`${title} - Reactive | A small blog by Herbie Vine`}
+        key="title"
+      />
       <meta name="description" content={description} key="description" />
+      <link rel="icon" href="favicon.ico" type="image/x-icon" />
+      <meta
+        name="keywords"
+        content="blog, programming, javascript, typescript, react"
+      />
 
       {/* Open Graph */}
       <meta name="og:title" content={title} key="og:title" />

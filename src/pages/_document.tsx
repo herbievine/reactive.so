@@ -5,11 +5,6 @@ class MyDocument extends Document {
     return (
       <Html lang="en-EN">
         <Head>
-          <meta
-            name="keywords"
-            content="blog, programming, javascript, typescript, react"
-          />
-
           <script
             defer
             data-domain="reactive.so"
