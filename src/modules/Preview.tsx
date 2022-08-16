@@ -4,7 +4,7 @@ import Link from "next/link";
 import type React from "react";
 
 interface PreviewProps {
-  metadata: TMetadata;
+  metadata: TMetadata & { readingTime: string };
 }
 
 const Preview: React.FC<PreviewProps> = ({ metadata }) => {

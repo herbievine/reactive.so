@@ -13,16 +13,16 @@ interface ShareProps {
 const Share: React.FC<ShareProps> = ({ metadata }) => {
   return (
     <div className="py-4 flex justify-evenly items-center fill-gray-800 dark:fill-gray-200">
-      <a href={generateLink("twitter", metadata)}>
+      <a href={generateLink("twitter", metadata)} rel="noopener">
         <Twitter width={24} className="hover:fill-[#00acee] cursor-pointer" />
       </a>
-      <a href={generateLink("reddit", metadata)}>
+      <a href={generateLink("reddit", metadata)} rel="noopener">
         <Reddit width={24} className="hover:fill-[#ff8b60] cursor-pointer" />
       </a>
-      <a href={generateLink("linkedin", metadata)}>
+      <a href={generateLink("linkedin", metadata)} rel="noopener">
         <Linkedin width={24} className="hover:fill-[#0072b1] cursor-pointer" />
       </a>
-      <a href={generateLink("hackernews", metadata)}>
+      <a href={generateLink("hackernews", metadata)} rel="noopener">
         <HackerNews
           width={24}
           className="hover:fill-[#ff6600] cursor-pointer"

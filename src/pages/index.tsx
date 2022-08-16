@@ -3,9 +3,10 @@ import type { NextPage, GetStaticProps } from "next";
 import Page from "src/layouts/Page";
 import { TMetadata } from "@schema/metadata";
 import Preview from "src/modules/Preview";
+import readingTime from "@lib/readingTime";
 
 interface HomeProps {
-  posts: TMetadata[];
+  posts: (TMetadata & { readingTime: string })[];
 }
 
 const Home: NextPage<HomeProps> = ({ posts }) => {
@@ -24,7 +25,10 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
 export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {
-      posts: getAllPosts().map(({ post: { metadata } }) => metadata),
+      posts: getAllPosts().map(({ post: { metadata, content } }) => ({
+        ...metadata,
+        readingTime: readingTime(content),
+      })),
     },
   };
 };

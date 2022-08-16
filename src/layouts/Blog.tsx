@@ -1,7 +1,7 @@
 import getBaseUrl from "@lib/getBaseUrl";
 import { TMetadata } from "@schema/metadata";
 import type React from "react";
-import Credits from "src/modules/Credits";
+import Credits from "src/modules/Information";
 import Footer from "src/modules/Footer";
 import Header from "src/modules/Header";
 import Meta from "src/modules/Meta";
@@ -10,11 +10,13 @@ import Root from "./Root";
 
 interface BlogProps {
   metadata: TMetadata;
+  readingTime: string;
   children: React.ReactNode;
 }
 
 const Blog: React.FC<BlogProps> = ({
-  metadata: { title, excerpt, image, slug, ...matadataRest },
+  metadata: { title, excerpt, image, slug, createdAt },
+  readingTime,
   children,
 }) => {
   return (
@@ -31,12 +33,10 @@ const Blog: React.FC<BlogProps> = ({
         <Header />
         <div className="space-y-6">
           <h1 className="font-black text-3xl">{title}</h1>
-          <Credits
-            metadata={{ title, excerpt, image, slug, ...matadataRest }}
-          />
+          <Credits createdAt={createdAt} readingTime={readingTime} />
           {children}
         </div>
-        <Share metadata={{ title, excerpt, image, slug, ...matadataRest }} />
+        <Share metadata={{ title, excerpt, image, slug, createdAt }} />
         <Footer />
       </Root>
     </>
