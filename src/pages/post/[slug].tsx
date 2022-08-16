@@ -2,24 +2,22 @@ import { getAllPosts, getPost } from "@lib/api";
 import type { NextPage, GetStaticPaths, GetStaticProps } from "next";
 import type React from "react";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
-import { serialize } from "next-mdx-remote/serialize";
 import Blog from "src/layouts/Blog";
 import { TMetadata } from "@schema/metadata";
-import rehypeSlug from "rehype-slug";
-import rehypeHighlight from "rehype-highlight";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import remarkGfm from "remark-gfm";
 import Image from "next/future/image";
 import Link from "@components/Link";
+import mdxRenderer from "@lib/mdxRenderer";
+import readingTime from "@lib/readingTime";
 
 interface PostProps {
-  content: MDXRemoteSerializeResult<Record<string, unknown>>;
+  content: MDXRemoteSerializeResult;
   metadata: TMetadata;
+  readingTime: string;
 }
 
-const Post: NextPage<PostProps> = ({ content, metadata }) => {
+const Post: NextPage<PostProps> = ({ content, metadata, readingTime }) => {
   return (
-    <Blog metadata={metadata}>
+    <Blog metadata={metadata} readingTime={readingTime}>
       <article className="prose dark:prose-invert">
         <MDXRemote
           {...content}
@@ -59,17 +57,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   return {
     props: {
-      content: await serialize(content, {
-        mdxOptions: {
-          remarkPlugins: [remarkGfm],
-          rehypePlugins: [
-            rehypeSlug,
-            rehypeHighlight,
-            [rehypeAutolinkHeadings, { behavior: "append" }],
-          ],
-        },
-      }),
+      content: await mdxRenderer(content),
       metadata,
+      readingTime: readingTime(content),
     },
   };
 };
