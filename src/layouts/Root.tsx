@@ -1,0 +1,37 @@
+import Footer from "@/modules/Footer";
+import Header from "@/modules/Header";
+import { useTheme } from "next-themes";
+import type React from "react";
+import { useState, useEffect } from "react";
+
+interface RootProps {
+  titleIsHeader?: boolean;
+  children: React.ReactNode;
+}
+
+const Root: React.FC<RootProps> = ({ titleIsHeader, children }) => {
+  const { resolvedTheme: theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
+  return (
+    <div className={theme}>
+      <div className="w-full min-h-screen bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200 transition-colors duration-300">
+        <div className="w-5/6 max-w-2xl mx-auto py-12 space-y-12">
+          <Header isHeader={titleIsHeader} />
+          {children}
+          <Footer />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Root;
