@@ -26,6 +26,11 @@ const Post: NextPage<PostProps> = ({ content, metadata, readingTime }) => {
             Image: ({ src, alt, width = 1200, height = 630 }) => (
               <Image src={src} alt={alt} width={width} height={height} />
             ),
+            a: ({ href, children }) => (
+              <a href={href} target="_BLANK" rel="noreferrer">
+                {children}
+              </a>
+            ),
           }}
         />
       </article>
