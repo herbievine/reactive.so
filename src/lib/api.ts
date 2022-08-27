@@ -18,21 +18,25 @@ export const getPost = (
 ): {
   slug: string;
   post: TPost;
-} => {
-  const postPath = path.join(POSTS_PATH, `${slug}.mdx`);
-  const source = fs.readFileSync(postPath, "utf8");
-  const { content, data: metadata } = matter(source);
-  const postData = postSchema.parse({ content, metadata });
+} | null => {
+  try {
+    const postPath = path.join(POSTS_PATH, `${slug}.mdx`);
+    const source = fs.readFileSync(postPath, "utf8");
+    const { content, data: metadata } = matter(source);
+    const postData = postSchema.parse({ content, metadata });
 
-  return {
-    slug,
-    post: postData,
-  };
+    return {
+      slug,
+      post: postData,
+    };
+  } catch {
+    return null;
+  }
 };
 
 export const getAllPosts = () => {
   return getSlugs()
-    .map((slug) => getPost(slug))
+    .map((slug) => getPost(slug)!)
     .sort(({ post: { metadata: a } }, { post: { metadata: b } }) =>
       dayjs(a.createdAt).isAfter(dayjs(b.createdAt)) ? -1 : 1
     )
