@@ -50,15 +50,17 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const slug = (params?.slug ?? "") as string;
 
-  const {
-    post: { content, metadata },
-  } = getPost(slug);
+  const postPayload = getPost(slug);
 
-  if (!content || !metadata) {
+  if (!postPayload) {
     return {
       notFound: true,
     };
   }
+
+  const {
+    post: { content, metadata },
+  } = postPayload;
 
   return {
     props: {

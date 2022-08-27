@@ -1,4 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
+import getBaseUrl from "@lib/getBaseUrl";
 
 class MyDocument extends Document {
   render() {
@@ -13,6 +14,11 @@ class MyDocument extends Document {
           <link
             href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@500;600;700;800;900&display=swap"
             rel="stylesheet"
+          />
+          <link
+            rel="shortcut icon"
+            href={getBaseUrl() + "/favicon.ico"}
+            type="image/x-icon"
           />
         </Head>
         <body>

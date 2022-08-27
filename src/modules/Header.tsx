@@ -26,13 +26,21 @@ const Header: React.FC<HeaderProps> = ({ isHeader }) => {
       </Link>
       <button
         aria-label="theme selector"
-        className="p-2 rounded-lg border-2 border-indigo-500 dark:border-indigo-400"
+        className="p-2 flex justify-center items-center rounded-lg border-2 border-indigo-500 dark:border-indigo-400"
         onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
       >
         {theme === "dark" ? (
-          <Moon width={18} className="fill-indigo-500 dark:fill-indigo-400" />
+          <Moon
+            width={18}
+            height={18}
+            className="fill-indigo-500 dark:fill-indigo-400"
+          />
         ) : (
-          <Star width={18} className="fill-indigo-500 dark:fill-indigo-400" />
+          <Star
+            width={18}
+            height={18}
+            className="fill-indigo-500 dark:fill-indigo-400"
+          />
         )}
       </button>
     </div>
