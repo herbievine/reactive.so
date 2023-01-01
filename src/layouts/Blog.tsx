@@ -7,6 +7,7 @@ import Header from "src/modules/Header";
 import Meta from "src/modules/Meta";
 import Share from "src/modules/Share";
 import Root from "./Root";
+import Edit from "src/modules/Edit";
 
 interface BlogProps {
   metadata: TMetadata;
@@ -36,6 +37,7 @@ const Blog: React.FC<BlogProps> = ({
           <Credits createdAt={createdAt} readingTime={readingTime} />
           {children}
         </div>
+        <Edit slug={slug} />
         <Share metadata={{ title, excerpt, image, slug, createdAt }} />
         <Footer />
       </Root>

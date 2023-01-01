@@ -8,9 +8,7 @@ import dayjs from "dayjs";
 const POSTS_PATH = path.join(process.cwd(), "posts");
 
 export const getSlugs = (): string[] => {
-  const paths = sync(`${POSTS_PATH}/**/*.mdx`);
-
-  return paths.map((file) => path.basename(file, ".mdx"));
+  return sync(`${POSTS_PATH}/*.mdx`).map((file) => path.basename(file, ".mdx"));
 };
 
 export const getPost = (
@@ -30,7 +28,7 @@ export const getPost = (
       post: postData,
     };
   } catch {
-    return null;
+    throw new Error(`Could not find post with slug: ${slug}`);
   }
 };
 
