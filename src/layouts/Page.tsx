@@ -22,7 +22,7 @@ const Page: React.FC<PageProps> = ({ title, description, children }) => {
 
       <Root>
         <Header isHeader />
-        <div className="space-y-10">{children}</div>
+        <div className="flex flex-col space-y-10">{children}</div>
         <Footer />
       </Root>
     </>

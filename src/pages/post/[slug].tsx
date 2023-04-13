@@ -4,7 +4,7 @@ import type React from "react";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import Blog from "src/layouts/Blog";
 import { TMetadata } from "@schema/metadata";
-import Image from "next/future/image";
+import Image from "next/image";
 import Link from "@components/Link";
 import mdxRenderer from "@lib/mdxRenderer";
 import readingTime from "@lib/readingTime";
