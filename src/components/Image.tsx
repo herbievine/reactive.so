@@ -1,6 +1,6 @@
 import type React from "react";
 import NextImage from "next/future/image";
-import getBaseUrl from "@lib/getBaseUrl";
+import getBaseUrl from "@/lib/getBaseUrl";
 
 interface ImageProps
   extends React.DetailedHTMLProps<

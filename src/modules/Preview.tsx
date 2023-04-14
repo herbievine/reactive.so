@@ -1,4 +1,4 @@
-import { TMetadata } from "@schema/metadata";
+import { TMetadata } from "@/schema/metadata";
 import dayjs from "dayjs";
 import Link from "next/link";
 import type React from "react";

@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs";
 import { sync } from "glob";
 import matter from "gray-matter";
-import { postSchema, TPost } from "@schema/post";
+import { postSchema, TPost } from "@/schema/post";
 import dayjs from "dayjs";
 
 const POSTS_PATH = path.join(process.cwd(), "posts");

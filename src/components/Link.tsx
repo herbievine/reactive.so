@@ -1,6 +1,6 @@
 import type React from "react";
 import NextLink from "next/link";
-import getBaseUrl from "@lib/getBaseUrl";
+import getBaseUrl from "@/lib/getBaseUrl";
 
 interface LinkProps
   extends React.DetailedHTMLProps<

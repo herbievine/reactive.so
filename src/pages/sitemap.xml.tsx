@@ -1,5 +1,5 @@
-import { getAllPosts } from "@lib/api";
-import getBaseUrl from "@lib/getBaseUrl";
+import { getAllPosts } from "@/lib/api";
+import getBaseUrl from "@/lib/getBaseUrl";
 import type { NextPage, GetServerSideProps } from "next";
 
 interface SiteMapProps {}

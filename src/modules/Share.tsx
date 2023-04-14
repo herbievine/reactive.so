@@ -1,5 +1,5 @@
-import generateLink from "@lib/generateLink";
-import { TMetadata } from "@schema/metadata";
+import generateLink from "@/lib/generateLink";
+import { TMetadata } from "@/schema/metadata";
 import type React from "react";
 import HackerNews from "src/assets/HackerNews";
 import Linkedin from "src/assets/Linkedin";

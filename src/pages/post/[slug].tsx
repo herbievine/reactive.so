@@ -1,13 +1,13 @@
-import { getAllPosts, getPost } from "@lib/api";
+import { getAllPosts, getPost } from "@/lib/api";
 import type { NextPage, GetStaticPaths, GetStaticProps } from "next";
 import type React from "react";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import Blog from "src/layouts/Blog";
-import { TMetadata } from "@schema/metadata";
+import { TMetadata } from "@/schema/metadata";
 import Image from "next/image";
-import Link from "@components/Link";
-import mdxRenderer from "@lib/mdxRenderer";
-import readingTime from "@lib/readingTime";
+import Link from "@/components/Link";
+import mdxRenderer from "@/lib/mdxRenderer";
+import readingTime from "@/lib/readingTime";
 
 interface PostProps {
   content: MDXRemoteSerializeResult;

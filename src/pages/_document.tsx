@@ -1,5 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
-import getBaseUrl from "@lib/getBaseUrl";
+import getBaseUrl from "@/lib/getBaseUrl";
 
 class MyDocument extends Document {
   render() {

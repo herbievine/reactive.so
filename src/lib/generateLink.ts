@@ -1,4 +1,4 @@
-import { TMetadata } from "@schema/metadata";
+import { TMetadata } from "@/schema/metadata";
 import getBaseUrl from "./getBaseUrl";
 
 const BASE_LINKS = {

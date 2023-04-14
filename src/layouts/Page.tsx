@@ -1,4 +1,4 @@
-import getBaseUrl from "@lib/getBaseUrl";
+import getBaseUrl from "@/lib/getBaseUrl";
 import type React from "react";
 import Footer from "src/modules/Footer";
 import Header from "src/modules/Header";

@@ -1,5 +1,5 @@
-import getBaseUrl from "@lib/getBaseUrl";
-import { TMetadata } from "@schema/metadata";
+import getBaseUrl from "@/lib/getBaseUrl";
+import { TMetadata } from "@/schema/metadata";
 import type React from "react";
 import Credits from "src/modules/Information";
 import Footer from "src/modules/Footer";

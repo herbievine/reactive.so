@@ -1,4 +1,4 @@
-import getBaseUrl from "@lib/getBaseUrl";
+import getBaseUrl from "@/lib/getBaseUrl";
 import Head from "next/head";
 import type React from "react";
 
