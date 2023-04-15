@@ -16,10 +16,10 @@ export const metadata: Metadata = {
     default: "Reactive",
     template: "%s - Reactive",
   },
-  description: "A blog about programming concepts and technologies",
+  description: "A blog about programming concepts and techn",
   openGraph: {
     title: "Reactive",
-    description: "A blog about programming concepts and technologies",
+    description: "A blog about programming concepts and techn",
     type: "website",
     url: "https://reactive.so",
     images: [
