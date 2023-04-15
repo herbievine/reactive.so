@@ -2,13 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  html {
-    font-family: 'Be Vietnam Pro', Proxima Nova, system-ui, sans-serif;
-    @apply transition-colors duration-300;
-  }
-}
-
 .hljs {
   @apply font-semibold font-mono
 }

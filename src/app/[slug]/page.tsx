@@ -1,62 +1,45 @@
-import React from 'react'
-import { getAllPosts, getPost as getOnePost } from "@/lib/api";
-import Blog from '@/layouts/Blog';
-import { MDXRemote } from 'next-mdx-remote';
-import { notFound } from 'next/navigation';
-import mdxRenderer from '@/lib/mdxRenderer';
-import Link from '@/components/Link';
-import Image from 'next/image';
+import React from "react";
+import { notFound } from "next/navigation";
+import { allPosts } from "contentlayer/generated";
+import Render from "@/components/Render";
+import Balancer from "react-wrap-balancer";
+import dayjs from "dayjs";
 
 export async function generateStaticParams() {
-  return getAllPosts().map((post) => ({
-    slug: post.slug,
+  return allPosts.map(({ slug }) => ({
+    slug,
   }));
 }
 
-export async function getPost(slug = '') {
-  const post = getOnePost(slug);
-
-  if (!post) {
-    notFound()
-  }
-
-	return {
-    post: post.post,
-    content: await mdxRenderer(post.post.content ?? ''),
-  }
-}
-
-type PostPageProps = React.PropsWithChildren<{
+type PostPageProps = {
   params?: {
     slug?: string;
   };
-}>
+};
 
-export default async function PostPage ({params}: PostPageProps) {
-	const { post, content } = await getPost(params?.slug)
+export default async function PostPage({ params }: PostPageProps) {
+  const post = allPosts.find(({ slug }) => slug === params?.slug);
 
   if (!post) {
-    notFound()
+    notFound();
   }
 
-	return (
-    <Blog metadata={post.metadata} readingTime={''}>
-      <article className="prose dark:prose-invert">
-        <MDXRemote
-          {...content}
-          components={{
-            Link,
-            Image: ({ src, alt, width = 1200, height = 630 }) => (
-              <Image src={src} alt={alt} width={width} height={height} />
-            ),
-            a: ({ href, children }) => (
-              <a href={href} target="_BLANK" rel="noreferrer">
-                {children}
-              </a>
-            ),
-          }}
-        />
-      </article>
-    </Blog>
+  return (
+    <div className="w-full flex flex-col space-y-6">
+      <div className="w-full flex flex-col space-y-2">
+        <h1 className="text-3xl font-bold font-serif">
+          <Balancer>{post.title}</Balancer>
+        </h1>
+        <div className="flex items-center space-x-2">
+          <p className="text-sm font-bold text-neutral-500">
+            <time dateTime={dayjs(post.date).format("YYYY-MM-DD")}>
+              {dayjs(post.date).format("DD/MM/YYYY")}
+            </time>
+          </p>
+          <div className="w-full h-0.5 bg-neutral-300 dark:bg-neutral-700" />
+        </div>
+      </div>
+      <Render code={post.body.code} />
+    </div>
   );
 }
