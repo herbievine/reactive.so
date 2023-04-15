@@ -4,6 +4,7 @@ import { EB_Garamond } from "next/font/google";
 import { clsx } from "clsx";
 import Link from "next/link";
 import { Metadata } from "next";
+import { Analytics } from '@vercel/analytics/react';
 
 const ebGaramond = EB_Garamond({
   subsets: ["latin"],
@@ -68,6 +69,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           </Link>
           <div className="w-full">{children}</div>
         </div>
+        <Analytics />
       </body>
     </html>
   );
