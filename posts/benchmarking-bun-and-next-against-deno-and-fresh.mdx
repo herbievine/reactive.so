@@ -4,23 +4,23 @@ description: We're going to be comparing the most popular react framework Next t
 date: 2022-08-19
 ---
 
-Yes, you heard that right, we’re going to be comparing the most popular react framework Next to a fresh new framework called Fresh (pun intended). Next will be running with a new runtime called Bun (you can checkout more about that <Link href="/post/whats-the-deal-with-bun">here</Link>) and Fresh will be running with Deno. I’ve written 2 applications, a simple counter app, and a more complex app that renders some Pokémon. I’ll be using [Hyperfine](https://github.com/sharkdp/hyperfine) to benchmark the results. All the apps will be available on Github.
+Yes, you heard that right, we're going to be comparing the most popular react framework Next to a fresh new framework called Fresh (pun intended). Next will be running with a new runtime called Bun (you can checkout more about that <Link href="/whats-the-deal-with-bun">here</Link>) and Fresh will be running with Deno. I've written 2 applications, a simple counter app, and a more complex app that renders some Pokémon. I'll be using [Hyperfine](https://github.com/sharkdp/hyperfine) to benchmark the results. All the apps will be available on Github.
 
 ## How am I measuring the performance?
 
-We’re going to be looking at 5 metrics:
+We're going to be looking at 5 metrics:
 
 - [First Contentful Paint](https://developer.mozilla.org/en-US/docs/Glossary/First_contentful_paint) (FCP): Measures the time from when the page starts loading to when any part of the page's content is rendered on the screen.
 - [Largest Contentful Paint](https://developer.mozilla.org/en-US/docs/Web/API/Largest_Contentful_Paint_API) (LCP): Marks the point in the page load timeline when the page's main content has likely loaded.
 - [DOM Content Loaded Listener](https://developer.mozilla.org/en-US/docs/Web/API/Window/DOMContentLoaded_event) (DCL): Marks the point when the page's initial HTML document has been completely loaded and parsed, without waiting for stylesheets, images, and subframes to finish loading.
 - [Time to Interactive](https://developer.mozilla.org/en-US/docs/Glossary/Time_to_interactive) (TTI): Measures the time from when the page starts loading to when its main sub-resources have loaded and it is capable of reliably responding to user input quickly.
-- [Lighthouse](https://github.com/GoogleChrome/lighthouse): A tool developed by Google to measure a website’s performance using an average of six metrics.
+- [Lighthouse](https://github.com/GoogleChrome/lighthouse): A tool developed by Google to measure a website's performance using an average of six metrics.
 
 \*Some definitions above come from the Google Dev Tools. They do a great job describing these APIs, so I decided to put them here instead of trying to explain them.
 
 These four metrics and an overall Lighthouse score will determine which of these two frameworks is the fastest.
 
-Also, keep in mind I’m doing this locally, so we’re not going to be using Vercel or Deno Deploy in our benchmarks.
+Also, keep in mind I'm doing this locally, so we're not going to be using Vercel or Deno Deploy in our benchmarks.
 
 ## Counter (CSR)
 
@@ -48,13 +48,13 @@ Fresh does things a bit differently from Next. Here are the core reasons why:
 - JIT runtime: Deno runs TypeScript out of the box, which means there is no build step like we see with Next and Vercel.
 - Island hydration: When Fresh does ship JS, it hydrates it only on the client with the necessary props.
 
-It’s these main advantages that give it an edge over Next.
+It's these main advantages that give it an edge over Next.
 
 ## Thoughts
 
-Will Fresh & Deno take over the web ecosystem anytime soon? I don’t think so. It will be a long time still before we see a shift from Next to Fresh. The developer experience using Fresh isn’t always great either. Their documentation is limited, and the community is still very small. However, there is great potential. I can see Fresh being production ready in less than a year from now.
+Will Fresh & Deno take over the web ecosystem anytime soon? I don't think so. It will be a long time still before we see a shift from Next to Fresh. The developer experience using Fresh isn't always great either. Their documentation is limited, and the community is still very small. However, there is great potential. I can see Fresh being production ready in less than a year from now.
 
-Enough rambling on about Fresh, why don’t you give it a go: [https://fresh.deno.dev/](https://fresh.deno.dev/)
+Enough rambling on about Fresh, why don't you give it a go: [https://fresh.deno.dev/](https://fresh.deno.dev/)
 
 Projects are on [Github](https://github.com/reactive-so/next-vs-fresh).
 

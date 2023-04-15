@@ -1,15 +1,10 @@
 ---
 title: Pushing the limits of TypeScript
-description: I often get stuck with TypeScript, and when I do, I want to throw my Mac out of the window. So I’ve created this article, to help you and I write better code. I’ll be updating this post when I stumbled upon new and useful TypeScript hacks. In the meantime, feel free to get inspired to create your own cool TS magic, or to just steal some code, I won’t judge… 😜
+description: I often get stuck with TypeScript, and when I do, I want to throw my Mac out of the window. So I've created this article, to help you and I write better code. I'll be updating this post when I stumbled upon new and useful TypeScript hacks. In the meantime, feel free to get inspired to create your own cool TS magic, or to just steal some code, I won't judge… 😜
 date: 2022-08-12
 ---
 
-<Image
-  src="/static/images/pushing-the-limits-of-typescript.png"
-  alt="Pushing the limits of TypeScript header image"
-/>
-
-I often get stuck with TypeScript, and when I do, I want to throw my Mac out of the window. So I’ve created this article, to help you and I write better code. I’ll be updating this post when I stumbled upon new and useful TypeScript hacks. In the meantime, feel free to get inspired to create your own cool TS magic, or to just steal some code, I won’t judge… 😜
+I often get stuck with TypeScript, and when I do, I want to throw my Mac out of the window. So I've created this article, to help you and I write better code. I'll be updating this post when I stumbled upon new and useful TypeScript hacks. In the meantime, feel free to get inspired to create your own cool TS magic, or to just steal some code, I won't judge… 😜
 
 ## First index of array
 
@@ -19,7 +14,7 @@ You might want to get the type of the first index in an array, and if so, this u
 type First<T extends any[]> = T extends [infer P, ...any[]] ? P : never;
 ```
 
-It’s a rather simple utility type to help you infer the type of the first index of an array.
+It's a rather simple utility type to help you infer the type of the first index of an array.
 
 ```tsx
 type Test1 = First<[() => string, "a", "b"]>;
@@ -34,7 +29,7 @@ type Test3 = First<[]>;
 
 As a bonus, to get the last element of the tuple, change `[infer P, ...any[]]` to `[...any[], infer P]`!
 
-If you’d like to use a variable of type tuple, you’ll be better off using the bracket notation to access the first element of the array, like this: `T[0]`.
+If you'd like to use a variable of type tuple, you'll be better off using the bracket notation to access the first element of the array, like this: `T[0]`.
 
 ```tsx
 type First<T extends readonly any[]> = T[0];
@@ -53,7 +48,7 @@ type Test = First<typeof numbers>;
 
 ## Infer the type of each element when using map()
 
-Let’s say you have an array of vowels, or `string[]`. Now, let’s say you want to loop over the array using `Array.map()`. You would have something like this:
+Let's say you have an array of vowels, or `string[]`. Now, let's say you want to loop over the array using `Array.map()`. You would have something like this:
 
 ```tsx
 const vowels = ["a", "e", "i", "o", "u"];
@@ -71,7 +66,7 @@ vowels.map((v) => {});
 //          ^ v: "a" | "e" | "i" | "o" | "u"
 ```
 
-Casting your array as a `const` does come with a drawback, however. You won’t be able to mutate it after the fact. That means no more `Array.push()`, `Array.pop()`, etc…
+Casting your array as a `const` does come with a drawback, however. You won't be able to mutate it after the fact. That means no more `Array.push()`, `Array.pop()`, etc…
 
 ## Getting the length of a tuple
 
@@ -101,6 +96,6 @@ type Test2 = Length<typeof letters>;
 
 ## Conclusion
 
-That’s it! I hope this helped someone out there. I’ll be updating this post when I stumble upon some other fancy TS trick. In the meantime, you can check out <Link href="/post/whats-the-deal-with-bun">this post</Link> which I’ll link here. It’s worth the read; I promise.
+That's it! I hope this helped someone out there. I'll be updating this post when I stumble upon some other fancy TS trick. In the meantime, you can check out <Link href="/post/whats-the-deal-with-bun">this post</Link> which I'll link here. It's worth the read; I promise.
 
 Thanks for reading 😊
