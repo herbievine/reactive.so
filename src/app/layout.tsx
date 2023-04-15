@@ -3,12 +3,53 @@ import "@/styles/globals.css";
 import { EB_Garamond } from "next/font/google";
 import { clsx } from "clsx";
 import Link from "next/link";
+import { Metadata } from "next";
 
 const ebGaramond = EB_Garamond({
   subsets: ["latin"],
   variable: "--eb-garamond",
   display: "swap",
 });
+
+export const metadata: Metadata = {
+  title: {
+    default: "reactive",
+    template: "%s - reactive",
+  },
+  description: "A blog about React, Next.js, and TypeScript",
+  openGraph: {
+    title: "reactive",
+    description: "A blog about React, Next.js, and TypeScript",
+    type: "website",
+    url: "https://reactive.so",
+    images: [
+      {
+        url: "https://reactive.so/og.png",
+        width: 1200,
+        height: 630,
+        alt: "reactive",
+      },
+    ],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  twitter: {
+    title: "Lee Robinson",
+    card: "summary_large_image",
+  },
+  icons: {
+    shortcut: "/favicon.ico",
+  },
+};
 
 type RootLayoutProps = React.PropsWithChildren<{}>;
 

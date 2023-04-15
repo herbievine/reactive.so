@@ -2,10 +2,10 @@ import React from "react";
 import { allPosts } from "contentlayer/generated";
 import dayjs from "dayjs";
 import Link from "next/link";
+import { Metadata } from "next";
 
-export const metadata = {
-  title: "Reactive - Home",
-  description: "A blog about software development",
+export const metadata: Metadata = {
+  title: "Home",
 };
 
 type HomePageProps = {};

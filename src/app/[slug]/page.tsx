@@ -18,6 +18,7 @@ export async function generateMetadata({
   params: { slug: string };
 }): Promise<Metadata | undefined> {
   const post = allPosts.find((post) => post.slug === params.slug);
+
   if (!post) {
     return;
   }
