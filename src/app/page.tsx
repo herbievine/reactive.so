@@ -19,7 +19,7 @@ export default async function HomePage({}: HomePageProps) {
           <Link key={p.title} href={p.url} className="w-full">
             <div className="flex flex-col space-y-1">
               <h2 className="text-2xl font-serif font-bold">{p.title}</h2>
-              <p className="text-sm font-bold text-gray-500">
+              <p className="text-sm font-bold text-neutral-500">
                 {dayjs(p.date).format("DD/MM/YYYY")}
               </p>
             </div>
