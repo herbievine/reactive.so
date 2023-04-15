@@ -13,13 +13,13 @@ const ebGaramond = EB_Garamond({
 
 export const metadata: Metadata = {
   title: {
-    default: "reactive",
-    template: "%s - reactive",
+    default: "Reactive",
+    template: "%s - Reactive",
   },
-  description: "A blog about React, Next.js, and TypeScript",
+  description: "A blog about programming concepts and technologies",
   openGraph: {
-    title: "reactive",
-    description: "A blog about React, Next.js, and TypeScript",
+    title: "Reactive",
+    description: "A blog about programming concepts and technologies",
     type: "website",
     url: "https://reactive.so",
     images: [
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
         url: "https://reactive.so/og.png",
         width: 1200,
         height: 630,
-        alt: "reactive",
+        alt: "Reactive",
       },
     ],
   },
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: "Lee Robinson",
+    title: "Reactive",
     card: "summary_large_image",
   },
   icons: {
