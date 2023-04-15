@@ -4,11 +4,48 @@ import { allPosts } from "contentlayer/generated";
 import Render from "@/components/Render";
 import Balancer from "react-wrap-balancer";
 import dayjs from "dayjs";
+import { Metadata } from "next";
 
 export async function generateStaticParams() {
   return allPosts.map(({ slug }) => ({
     slug,
   }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}): Promise<Metadata | undefined> {
+  const post = allPosts.find((post) => post.slug === params.slug);
+  if (!post) {
+    return;
+  }
+
+  const { title, date, description, slug } = post;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      publishedTime: dayjs(date).toISOString(),
+      url: `https://reactive.so/blog/${slug}`,
+      images: [
+        {
+          url: `https://reactive.so/api/og?title=${title}`,
+        },
+      ],
+    },
+    twitter: {
+      title,
+      description,
+      card: "summary_large_image",
+      images: [`https://reactive.so/api/og?title=${title}`],
+    },
+  };
 }
 
 type PostPageProps = {

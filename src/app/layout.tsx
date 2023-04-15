@@ -21,7 +21,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           ebGaramond.variable
         )}
       >
-        <div className="w-full mx-auto md:max-w-2xl px-6 py-20 flex flex-col items-center space-y-14">
+        <div className="w-full mx-auto md:max-w-2xl px-6 py-12 flex flex-col items-center space-y-12">
           <Link href="/" className="w-min text-2xl font-bold font-serif">
             reactive
           </Link>
