@@ -3,6 +3,9 @@
 # contentful
 .contentlayer
 
+# local posts
+/posts/local.*
+
 # dependencies
 /node_modules
 /.pnp
