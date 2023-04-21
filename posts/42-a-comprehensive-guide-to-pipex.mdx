@@ -4,17 +4,17 @@ description: "A comprehensive guide to the Pipex project from 42."
 date: 2023-04-20
 ---
 
-# Introduction
+## Introduction
 
-Pipex is a project you'll likely encounter on your 42 journey, and one which may give you a bit of a headache. Its purpose is to teach you some basic UNIX operations, and will greatly help you in the completion of Minishell (a mandatory project you'll face later).
+Pipex is a project you’ll likely encounter on your 42 journey, and one which may give you a bit of a headache. Its purpose is to teach you some basic UNIX operations, and will greatly help you in the completion of Minishell (a mandatory project you’ll face later).
 
 Pipex focuses on three main concepts: pipelines, child processes and execution of commands. I will cover all three of these topics as best I can, and guide you through the main parts of the program.
 
-# Understanding the Whitelisted Functions
+## Understanding the Whitelisted Functions
 
-## dup2(2)
+### dup2(2)
 
-`dup2(2)` helps you 'replace' open file descriptors. By default, FD 0, 1 and 2 are open and are set to `stdin`, `stdout` and `stderr` respectively. `dup2(2)` allows you to replace these with another FD, which you may obtain with `open(2)`. This can be useful for redirecting output from one FD to another, like using `printf(3)` to print to a file instead of the terminal.
+`dup2(2)` helps you ‘replace’ open file descriptors. By default, FD 0, 1 and 2 are open and are set to `stdin`, `stdout` and `stderr` respectively. `dup2(2)` allows you to replace these with another FD, which you may obtain with `open(2)`. This can be useful for redirecting output from one FD to another, like using `printf(3)` to print to a file instead of the terminal.
 
 Here is an example of using `dup2(2)` to redirect the output of a process from the terminal to a file:
 
@@ -25,19 +25,20 @@ Here is an example of using `dup2(2)` to redirect the output of a process from t
 
 int main()
 {
-	int fd = open("example.txt", O_WRONLY | O_CREAT, 0644);
+	int fd;
 
+	fd = open("example.txt", O_WRONLY | O_CREAT, 0644);
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
 	printf("This is printed in example.txt!\n");
 
-	return 0;
+	return (0);
 }
 ```
 
 This code opens a file called `example.txt`, and then uses `dup2(2)` to redirect `stdout` to the file descriptor returned by `open(2)`. This means that any output from `printf(3)` will be written to the file instead of the terminal. The file is then closed, and the `printf(3)` statement writes to the file.
 
-## access(2)
+### access(2)
 
 `access(2)` checks whether a process has permission to access a file or directory. It takes two arguments: the path to the file or directory, and a mode representing the type of access being checked. The mode is specified using constants such as `R_OK`, `W_OK`, and `X_OK`, which represent read, write, and execute permissions, respectively.
 
@@ -54,34 +55,40 @@ int main()
 	else
 		printf("I don't have permission\n");
 
-	return 0;
+	return (0);
 }
 ```
 
-## execve(2)
+### execve(2)
 
 `execve(2)` is a system call that allows you to execute another program from within your program. It replaces the current process image with a new process image, effectively running a new program. It takes three arguments: the path to the program to be executed, an array of command line arguments, and an array of environment variables.
 
 Here is an example of using `execve(2)` to run the `ls` command:
 
+````c
 ```c
 #include <unistd.h>
 #include <stdio.h>
 
 int main()
 {
-	char *args[] = {"ls", "-l", NULL};
+	char *args[3];
 
+	args[0] = "ls";
+	args[1] = "-l";
+	args[2] = NULL;
 	execve("/bin/ls", args, NULL);
 	printf("This line will not be executed.\n");
 
-	return 0;
+	return (0);
 }
-```
+````
+
+````
 
 In this code, the `args` array contains the command line arguments to be passed to the `ls` command. `execve(2)` is then called with the path to the `ls` command (`/bin/ls`), the `args` array, and `NULL` for the environment variables. This replaces the current process image with the `ls` command, and the output of `ls -l` will be printed to the terminal. The `printf()` statement after `execve(2)` will not be executed, as the process image has been replaced.
 
-## fork(2)
+### fork(2)
 
 `fork(2)` is a system call that creates a new process by duplicating the calling process. The new process is known as the child process, while the original process is known as the parent process. After the fork, both processes execute the same code, but each has a separate memory space.
 
@@ -94,8 +101,9 @@ Here is an example of using `fork(2)` to create a child process:
 
 int main()
 {
-	pid_t pid = fork();
+	pid_t pid;
 
+	pid = fork();
 	if (pid == -1)
 	{
 		perror("fork");
@@ -107,13 +115,13 @@ int main()
 	else
 		printf("This is the parent process. (pid: %d)\n", getpid());
 
-	return 0;
+	return (0);
 }
-```
+````
 
 In this code, `fork(2)` is used to create a child process. The child process prints "This is the child process." to the terminal, while the parent process prints "This is the parent process." to the terminal. Both processes have a different `pid` and both exit after printing.
 
-## pipe(8)
+### pipe(8)
 
 `pipe(8)` is a system call that creates a unidirectional data channel that can be used for interprocess communication. The data written to one end of the pipe can be read from the other end of the pipe. Pipes are often used in combination with `fork(2)` to create a communication channel between parent and child processes.
 
@@ -163,7 +171,7 @@ int main()
 
 In this code, `pipe(8)` is used to create a pipe, and `fork(2)` is used to create a child process. The child process writes the string "Hello, parent!" to the write end of the pipe using `write(2)`, and then exits. The parent process reads the string from the read end of the pipe using `read(2)`, and then prints it to the terminal using `printf(3)`. The pipe is then closed in both processes using `close(2)`.
 
-## unlink(1)
+### unlink(1)
 
 `unlink(1)` is a command that removes a file from the file system. It takes a single argument, which is the path to the file to be removed.
 
@@ -180,22 +188,22 @@ int main()
 	else
 		printf("Error deleting file");
 
-	return 0;
+	return (0);
 }
 ```
 
 In this code, `unlink(1)` is used to remove the file `example.txt` from the file system. `unlink(1)` returns `0` if all the files were deleted, and `-1` if an error occurred.
 
-# The Program
+## The Program
 
-## Parsing
+### Parsing
 
-This is the first step of your program. It needs to make sure the input is correct, and how to handle unexpected data. This includes handling `here_doc`, opening the `infile` and `outfile`, and, if necessary, exiting the program (this includes closing all open FDs, freeing all memory, and using `unlink` to remove the temporary file from `here_doc`, we'll get back to this later).
+This is the first step of your program. It needs to make sure the input is correct, and how to handle unexpected data. This includes handling `here_doc`, opening the `infile` and `outfile`, and, if necessary, exiting the program (this includes closing all open FDs, freeing all memory, and using `unlink(1)` to remove the temporary file from `here_doc`, we’ll get back to this later).
 
-Your `main` function may follow a similar pattern to the below pseudocode. It's a simple design, and provides you with the potential to exit the program at any given stage.
+Your `main` function may follow a similar pattern to the below pseudocode. It’s a simple structure, and provides you with the potential to exit the program at any given stage.
 
 ```
-main
+main()
 {
 	ft_init_pipex()
 	ft_check_args()
@@ -206,17 +214,33 @@ main
 }
 ```
 
-I recommend having two functions to store the inputs: one which will find the correct path using `envp` and store it in an array, and the other which will contain the arguments to the program. This will then help you build the required arguments for `execve(2)`.
+`ft_init_pipex` is used to fill the your struct with some default data, which may otherwise cause problems with Valgrind, as you may conditionally check the properties within your `struct` in your cleanup function.
 
-In this scenario, `ft_parse_cmds` will create an array like this: `["/bin/cat", "/usr/bin/head", "/usr/bin/wc"]`, and the `ft_parse_args` will use `ft_split` to yield a 2D array like this one: `[["cat"], ["head", "-n", "5"], ["wc", "-l"]]`. I recommend using a struct and storing all the data within it (see the struct I used below).
+I have a function `ft_check_args` which simply opens all files needed and handles `here_doc`. You should be able to get away with a custom `get_next_line` to complete `here_doc`.
 
-## Execution
+I recommend having two functions to parse and store the inputs: one which will find the correct path using `envp` and store it in an array, and the other which will contain the arguments to the program. This will then help you build the required arguments for `execve(2)`.
 
-The core idea of this program is to execute the first command with the `infile` as input, send the output to the `write` end of a pipe, collect the data from the `read` end, and output it into the desired `outfile`. Successfully executing this is the hardest part of this program, so don't get frustrated if it takes time.
+In this scenario, `ft_parse_cmds` will create an array like this: `["/bin/cat", "/usr/bin/head", "/usr/bin/wc"]`, and the `ft_parse_args` will use `ft_split` to yield a 2D array like this one: `[["cat"], ["head", "-n", "5"], ["wc", "-l"]]` (remember to NULL terminate your arrays!). I recommend using a struct and storing all the data within it (see the struct I used below).
 
-You may have noticed you can't even use `printf(3)` as `dup2(2)` replaces `stdout` with other FDs. The best solution I found was to hijack my `ft_printf` and turn it into a `dprintf(3)`, which essentially does the same, except we can specify an FD, which we set to 2 (`stderr`).
+### Execution
 
-The `ft_exec()` is where the magic happens. I'm not going to give you the code for it, because that would be too easy, so I will again write it in pseudocode:
+The core idea of this program is to mimick the data flow between programs. Running the below scripts in your terminal, _should_ output the same data (you need to use double quotes for commands with arguments):
+
+```bash
+# input from a file
+
+$ < Makefile cat | head -n 5 | wc -l > out
+$ ./pipex Makefile cat "head -n 5" "wc -l" out
+
+# input from `here_doc`
+
+$ << EOF cat | head -n 5 | wc -l >> out
+$ ./pipex here_doc EOF cat "head -n 5" "wc -l" out
+```
+
+You may have noticed you can’t even use `printf(3)` as `dup2(2)` replaces `stdout` with other FDs. The best solution I found was to hijack my `ft_printf` and turn it into a `dprintf(3)`, which essentially does the same, except we can specify an FD, which we set to 2 (`stderr`).
+
+The `ft_exec()` is where the magic happens. I’m not going to give you the code for it, because that would be too easy, so I will again write it in pseudocode:
 
 ```
 ft_exec()
@@ -236,13 +260,13 @@ ft_exec()
 }
 ```
 
-Essentially, after creating the pipe, the child process runs the command and redirects the `stdout` from the command into the write end of the pipe. The parent then 'catches' the output from the read end of the pipe, and outputs it back to the `stdin`. This is the main mechanism behind the relationship between parent and child process.
+After creating the pipe and creating the child process, the child runs the command and redirects the `stdout` from the command into the write end of the pipe using `dup2(2)`. The parent then ‘catches’ the output from the read end of the pipe, and outputs it back to the `stdin`. This is the main mechanism behind the relationship between parent and child process.
 
 You will however have to have a unique `dup2(2)` call for both the first and last command, as they need to be redirected towards the input/output that the user requested.
 
-## Cleanup
+### Cleanup
 
-After all your code has executed (or if an unlucky `malloc(3)` failed), you will need to clean up all the open FDs, allocated memory, and potentially the temporary `here_doc` file. For this, it's best to allocate all memory within a `pipex` struct, and conditionally close/free whatever is necessary.
+After all your code has executed (or if an unlucky `malloc(3)` failed), you will need to clean up all the open FDs, allocated memory, and potentially the temporary `here_doc` file. For this, it’s best to allocate all memory within a `t_pipex` struct, and conditionally close/free whatever is necessary.
 
 My struct looked like this, and it allowed me to exit the program at any stage, provided I had the struct within the scope of my function.
 
@@ -264,14 +288,21 @@ typedef struct s_pipex
 } t_pipex;
 ```
 
-# Common Mistakes
+## Common Mistakes
 
-- Not using `unlink(1)` to remove temporary files
-- Using the wrong permissions when using `open(2)`
-- Not appending `NULL` to the end of `argv` in `execve(2)`
+- Not using `unlink(1)` to remove temporary files.
+- Using the wrong permissions when using `open(2)`. The `outfile` needs to be opened with different permission depending on whether or not `here_doc` was used.
+- Not appending `NULL` to the end of `argv` in `execve(2)`. Doing so may lead to an invalid read.
+- Not setting default values to your `struct`. This may lead to warnings from Valgrind (which shouldn’t cause a fail) if you use these properties in a conditional check (`if`, `else`, `while`, etc…).
+- Mishandling invalid commands. You may not face this issue depending on how you developed your program, but in mine, it was possible to get `NULL` in `cmd_paths`, due to the command being invalid. If that’s your case too, it’s not a problem, just make sure you know what you’re doing.
 
-# Conclusion
+## Conclusion
 
-I hope this helped, feel free to share if it did. You can leave me feedback if you feel like there's anything to add, or if you see any mistakes, just reach out to me on [Twitter](https://twitter.com/herbievine).
+I hope this helped, feel free to share if it did. You can leave me feedback if you feel like there’s anything to add, or if you see any mistakes, just reach out to me on [Twitter](https://twitter.com/herbievine).
 
 Thanks for reading 🙂
+
+## Additional Resources
+
+- [Simulating the pipe "|" operator in C by CodeVault](https://www.youtube.com/watch?v=6xbLgZpOBi8)
+- [Redirecting standard output in C by CodeVault](https://www.youtube.com/watch?v=5fnVr-zH-SE)
