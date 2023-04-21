@@ -36,7 +36,7 @@ int main()
 }
 ```
 
-This code opens a file called `example.txt`, and then uses `dup2(2)` to redirect `stdout` to the file descriptor returned by `open(2)`. This means that any output from `printf(3)` will be written to the file instead of the terminal. The file is then closed, and the `printf(3)` statement writes to the file.
+This program opens a file called `example.txt`, and then uses `dup2(2)` to redirect `stdout` to the file descriptor returned by `open(2)`. This means that any output from `printf(3)` will be written to the file instead of the terminal. The file is then closed, and the `printf(3)` statement writes to the file.
 
 ### access(2)
 
@@ -65,7 +65,6 @@ int main()
 
 Here is an example of using `execve(2)` to run the `ls` command:
 
-````c
 ```c
 #include <unistd.h>
 #include <stdio.h>
@@ -82,9 +81,7 @@ int main()
 
 	return (0);
 }
-````
-
-````
+```
 
 In this code, the `args` array contains the command line arguments to be passed to the `ls` command. `execve(2)` is then called with the path to the `ls` command (`/bin/ls`), the `args` array, and `NULL` for the environment variables. This replaces the current process image with the `ls` command, and the output of `ls -l` will be printed to the terminal. The `printf()` statement after `execve(2)` will not be executed, as the process image has been replaced.
 
@@ -117,9 +114,9 @@ int main()
 
 	return (0);
 }
-````
+```
 
-In this code, `fork(2)` is used to create a child process. The child process prints "This is the child process." to the terminal, while the parent process prints "This is the parent process." to the terminal. Both processes have a different `pid` and both exit after printing.
+In the above program, `fork(2)` is used to create a child process. The child process prints "This is the child process." to the terminal, while the parent process prints "This is the parent process." to the terminal. Both processes have a different `pid` and both exit after printing.
 
 ### pipe(8)
 
@@ -136,7 +133,7 @@ int main()
 {
 	int fd[2];
 	pid_t pid;
-	char buffer[14];
+	char buffer[13];
 
 	if (pipe(fd) == -1)
 	{
