@@ -121,7 +121,7 @@ In the above program, `fork(2)` is used to create a child process. The child pro
 
 ### pipe(8)
 
-`pipe(8)` is a system call that creates a unidirectional data channel that can be used for interprocess communication. The data written to one end of the pipe can be read from the other end of the pipe. Pipes are often used in combination with `fork(2)` to create a communication channel between parent and child processes.
+`pipe(8)` creates a unidirectional data channel that can be used for interprocess communication. The data written to one end of the pipe can be read from the other end of the pipe. Pipes are often used in combination with `fork(2)` to create a communication channel between parent and child processes.
 
 Here is an example of using `pipe(8)` to create a pipe and communicate between two processes:
 
@@ -256,9 +256,9 @@ main()
 
 `ft_init_pipex` is used to fill your struct with some default data, which may otherwise cause problems with Valgrind, as you may conditionally check the properties within your `struct` in your cleanup function.
 
-I have a function `ft_check_args` which simply opens all files needed and handles `here_doc`. You should be able to get away with a custom `get_next_line` to complete `here_doc`.
+I have a function `ft_check_args` which simply opens all files needed and handles `here_doc` as well as `/dev/urandom`. You should be able to get away with a custom `get_next_line` to complete them.
 
-I recommend having two functions to parse and store the inputs: one which will find the correct path using `envp` and store it in an array, and the other which will contain the arguments to the program. This will then help you build the required arguments for `execve(2)`.
+I recommend having two functions to parse and store the commands: one which will find the correct path using `envp` and store it in an array, and the other which will contain the arguments to the program. This will then help you build the required arguments for `execve(2)`.
 
 In this scenario, `ft_parse_cmds` will create an array like this: `["/bin/cat", "/usr/bin/head", "/usr/bin/wc"]`, and the `ft_parse_args` will use `ft_split` to yield a 2D array like this one: `[["cat"], ["head", "-n", "5"], ["wc", "-l"]]` (remember to NULL terminate your arrays!). I recommend using a struct and storing all the data within it (see the struct I used below).
 
@@ -336,6 +336,7 @@ typedef struct s_pipex
 - Not setting default values to your `struct`. This may lead to warnings from Valgrind (which shouldn’t cause a fail) if you use these properties in a conditional check (`if`, `else`, `while`, etc…).
 - Mishandling invalid commands. You may not face this issue depending on how you developed your program, but in mine, it was possible to get `NULL` in `cmd_paths`, due to the command being invalid. If that’s your case too, it’s not a problem, just make sure you know what you’re doing.
 - Not mimicking the behaviour of BASH. An invalid infile or command DOES NOT mean you exit the program.
+- Special edge cases: `/dev/urandom` and `/dev/stdin`
 
 ## Conclusion
 
