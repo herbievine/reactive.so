@@ -192,6 +192,47 @@ int main()
 
 In this code, `unlink(1)` is used to remove the file `example.txt` from the file system. `unlink(1)` returns `0` if all the files were deleted, and `-1` if an error occurred.
 
+### wait(2)
+
+`wait(2)` suspends the execution of its calling process until a child process terminates.
+
+Here is an example of using `wait(2)` to wait until the 2s delay from the child process has terminated:
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+int main(int argc, char *argv[])
+{
+	pid_t pid;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	else if (pid == 0)
+	{
+		printf("I am the child process.\n");
+		sleep(2);
+		exit(EXIT_SUCCESS);
+	}
+	else
+	{
+		printf("I am the parent process.\n");
+		wait(NULL);
+		printf("Child process terminated after a 2s delay.\n");
+	}
+
+	return (EXIT_SUCCESS);
+}
+```
+
+Notice that the message only appears after the child process’ `sleep(1)` command has ended, and `exit(1)` is called, terminating its process.
+
 ## The Program
 
 ### Parsing
@@ -209,6 +250,7 @@ main()
 	ft_parse_args()
 	while (cmds)
 		ft_exec()
+	ft_cleanup()
 }
 ```
 
@@ -250,8 +292,7 @@ ft_exec()
 	}
 	else
 	{
-		dup2()
-		waitpid()
+		close()
 	}
 }
 ```
@@ -264,7 +305,7 @@ You may have noticed you can’t even use `printf(3)` as `dup2(2)` replaces `std
 
 ### Cleanup
 
-After all your code has executed (or if an unlucky `malloc(3)` failed), you will need to clean up all the open FDs, allocated memory, and potentially the temporary `here_doc` file. For this, it’s best to allocate all memory within a `t_pipex` struct, and conditionally close/free whatever is necessary.
+After all your code has executed (or if an unlucky `malloc(3)` failed), you will need to clean up all the open FDs, allocated memory, and potentially the temporary `here_doc` file. For this, it’s best to allocate all memory within a `t_pipex` struct, and conditionally close/free whatever is necessary. As well the above mentioned, you will need to make sure you wait for any child process to terminate.
 
 My struct looked like this, and it allowed me to exit the program at any stage, provided I had the struct within the scope of my function.
 
@@ -280,6 +321,7 @@ typedef struct s_pipex
 	int in_fd;
 	int out_fd;
 	t_bool here_doc; // use `int` if you prefer
+	t_bool is_invalid_infile;
 	char **cmd_paths;
 	char ***cmd_args;
 	int cmd_count;
