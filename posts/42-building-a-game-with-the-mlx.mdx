@@ -2,7 +2,7 @@
 title: "42: Building a Game with the MLX"
 description: "A deep dive into the 42 project so_long, including the MLX library, parsing, and error handling."
 tags: ["42", "so_long", "unix", "linux", "c", "guide", "tutorial", "mlx", "x11"]
-date: 2023-05-31
+date: 2023-06-01
 ---
 
 `so_long` is the first game you will build in your 42 cursus. It's a fun project, as it allows you to use your own graphical assets and animations. It will also significantly help you overcome `cub3d` when you get there, as the MLX is also used.
@@ -15,8 +15,7 @@ The MiniLibX, or MLX, is a framework built by Olivier Crouzet on top of X11, a w
 
 - `mlx_init`: Initialises the MLX library. Must be called before using any other functions.
 - `mlx_new_window`: Creates a new window instance.
-- `mlx_loop_hook`: Hook which gets called each loop (think of it as each frame, like FPS).
-- `mlx_key_hook`: Hook which gets called on each keypress.
+- `mlx_hook`: Registers events.
 - `mlx_loop`: Loops over the MLX pointer, triggering each hook in order of registration.
 - `mlx_xpm_file_to_image`: Converts an XPM file to an MLX image pointer.
 - `mlx_put_image_to_window`: Puts your image to the screen at the given coordinates.
@@ -24,11 +23,17 @@ The MiniLibX, or MLX, is a framework built by Olivier Crouzet on top of X11, a w
 - `mlx_destroy_window`: Frees the window instance.
 - `mlx_destroy_display`: Frees MLX.
 
-If you want more information about these functions, I recommend visiting 42Docs, as they have done a great job documenting the MLX (linked at the end).
+We will be looking into each function in more detail later, but if you want more information about these functions, I recommend visiting 42Docs, as they have done a great job documenting the MLX (linked at the end).
 
-## Installation
+## Installing the MLX
 
-Linking the MLX to your code is rather tricky, as it's not very well documented, so I will try to explain it with both a macOS and Linux machine (works on school computers too). These examples assume you have the MLX installed in your project under a folder called `mlx`. If you want to ease the installation process, you can use [42 CLI](https://github.com/herbievine/42-cli), which has great tooling around the MLX.
+Linking the MLX to your code is rather tricky, so I will try to explain it with both a macOS and Linux machine (works on school computers too). These examples assume you have the MLX installed in your project under a folder called `mlx`. If you don't have the MLX installed, you can install it by running this command:
+
+```bash
+git clone https://github.com/42Paris/minilibx-linux.git mlx
+```
+
+This will download the MLX in a folder called `mlx`, which will help you follow this next part. If you want to ease the installation/build process, you can use [42 CLI](https://github.com/herbievine/42-cli), which has great tooling around the MLX.
 
 ### MacOS
 
@@ -121,13 +126,16 @@ $(MLX_LIB):
 # [...]
 ```
 
-> Note: Always link your external libs AFTER your object files! Not doing so may lead to an `undefined reference`. Learn more about that [here](https://stackoverflow.com/questions/45135/why-does-the-order-in-which-libraries-are-linked-sometimes-cause-errors-in-gcc).
+> Note: Always link your external libs AFTER your object files! Not doing so may lead to an `undefined reference`.
 
 ## Flood Filling the Map
 
 Now that your Makefile is complete, you can move on to parsing. The main part of it is about this rule: “You have to check if there is a valid path in the map”.
 
-This means two things: the player needs access to the exit, and the player, prior to exiting the map, is able to collect all collectables.
+This means two things:
+
+1. The player needs access to the exit.
+2. The player, prior to exiting the map, is able to collect all collectables.
 
 This can be done in a single recursive function, which follows a similar pattern to the below pseudo-code:
 
@@ -148,13 +156,7 @@ return map_invalid;
 
 ## Developing with the MLX
 
-> I **highly** recommend using stack-allocated memory as much as possible, as it will make your life so much easier when you need to exit the program.
-
-Before you render something to your window instance, let's first get some basic stuff out of the way.
-
-You first need to go to [itch.io](https://itch.io/game-assets/tag-16x16), and choose some assets for your game (you can also make your own in Photoshop, just make sure you export them as PNG). After that, export each texture into a PNG image, and go to [Convertio](https://convertio.co/png-xpm/), which will take your images and transform them into an XPM file format.
-
-With these newly created XPM images, I recommend defining both your tile size and the paths for each of your assets in a header file. This will lead to more readable code, and your future self/evaluator will thank you for it.
+I highly recommend using stack-allocated memory as much as possible, as it will make your life so much easier when you need to exit the program.
 
 I also want to share the data structure I used in this assignment, as I believe it will help many of you to not fall into the same pitfalls I did.
 
@@ -164,7 +166,7 @@ typedef struct s_data
 	void		*mlx_ptr; // MLX pointer
 	void		*win_ptr; // MLX window pointer
 	void		*textures[5]; // MLX image pointers (on the stack)
-	t_map		*map; // Map pointer (contains map details - preferably keep on the stack)
+	t_map		*map; // Map pointer (contains map details - preferably kept on the stack)
 }	t_data;
 ```
 
@@ -190,7 +192,7 @@ int main(void)
 }
 ```
 
-In this example, you'll notice we set the `mlx_ptr` field in `t_data` to the result of the `mlx_init` function. It may return `NULL` if there was an issue with X11, which you will have to manage.
+In this example, you'll notice we set the `mlx_ptr` to the result of the `mlx_init` function. It may return `NULL` if there was an issue with X11, which you will have to manage.
 
 ### Creating Your First Window
 
@@ -228,15 +230,14 @@ This should open a window, and then immediately close it, as we are calling the 
 
 ### Listening for Events with Hooks
 
-Hooks are an essential part of the MLX, as they allow you to listen for changes and events. Here are a few of the core hooks that you will be using in `so_long`:
+Hooks are an essential part of the MLX, as they allow you to listen for changes and events. Here are a couple of the core hooks that you will be using in `so_long`:
 
 - `mlx_loop`: Registers any previously defined hooks and listens. This also prevents the default behaviour of destroying the window upon creating it.
-- `mlx_loop_hook`: This function takes a pointer to a function, which then gets called on every loop.
 - `mlx_hook`: Allows you to listen for native X11 events, such as mouse movements, key presses, window interaction, and more… ([full list here](https://tronche.com/gui/x/xlib/events/types.html))
 
-With these three hooks, you will be able to listen for user input and mutate data accordingly.
+With these two hooks, you will be able to listen for user input and mutate data accordingly.
 
-A basic implementation of this could look like this (note we're not using `mlx_loop_hook` here):
+A basic implementation of this could look like this:
 
 ```c
 #include "mlx/mlx.h"
@@ -263,7 +264,7 @@ int on_destroy(t_data *data)
 int on_keypress(int keysym, t_data *data)
 {
 	(void)data;
-	printf("Pressed key: %d\n", keysym);
+	printf("Pressed key: %d\\n", keysym);
 	return (0);
 }
 
@@ -292,16 +293,24 @@ int main(void)
 
 After instantiating MLX and the window, we register two hooks:
 
-- A key release hook, which calls the `on_keypress` function every time the user releases a key. This includes normal keys such as `a`, `A`, and `1`, but also some system keys, such as `ESC`.
+- A key release hook, which calls the `on_keypress` function every time the user releases a key. This includes normal keys such as `a`, `A`, and `1`, but also some system keys, such as `ESC`, `ENTER`, and `DEL`.
 - A destroy notify kook, which calls `on_destroy` after the user closes the window.
 
 You'll also notice the last argument of each hook is the argument we want to supply to our hook handler. In this case, we passed a reference to `data`, which contains information about our MLX pointers, but you can pass whatever you desire.
 
-> The `KeyRelease` and `DestroyNotify` constants can be imported through the X11 headers
+> The `KeyRelease` and `DestroyNotify` constants are native X11 events, and can be imported through the X11 headers.
 
 ### Loading Textures
 
-Loading textures into the MLX is a rather straightforward process. You will be using `mlx_xpm_file_to_image`, which loads a static XPM file from your `/assets` folder. It has the following prototype:
+Before loading your textures, you may notice you don't have any textures. Here is a quick way to get some basic assets, and make them ready for MLX:
+
+1. You first need to go to [itch.io](https://itch.io/game-assets/tag-16x16), and choose some assets for your game (you can also make your own in Photoshop, just make sure you export them as PNG).
+2. Export each texture into a PNG image.
+3. Go to [Convertio](https://convertio.co/png-xpm/), which will take your images and transform them into an XPM file format.
+
+With these newly created XPM images, I recommend defining both your tile size and the paths for each of your assets in a header file. This will lead to more readable code, and your future self/evaluator will thank you for it.
+
+Loading textures into the MLX is a rather straightforward process. You will be using `mlx_xpm_file_to_image` to load your XPM files from your `/assets` folder. It has the following prototype:
 
 ```c
 void *mlx_xpm_file_to_image(void *mlx_ptr, char *filename, int *width, int *height);
@@ -334,8 +343,8 @@ You will need to make sure you correctly render your assets. You will need to ta
 
 ## Common Mistakes
 
-- Rendering all textures in every frame. This uses up memory and after a (long) while will cause your program to crash.
-- Not using constants to increase readability/maintainability. Although not a bug, it isn't a good habit to explicitly index into an array with a fixed number or to use a plain string as an asset path.
+- Rendering all textures in every frame. This uses up memory and after a (very long) while will cause your program to crash.
+- Not using constants to increase readability/maintainability. Although not a bug, it isn't a good habit to explicitly index into an array with a fixed number, use a plain string as an asset path, or repeat an arbitrary value as your tile size.
 - Edge cases for map checking. Think of invalid permissions, a map with too few columns/rows, or even an empty line in the middle of the map.
 - Going to the exit without all collectables should not end the game.
 
