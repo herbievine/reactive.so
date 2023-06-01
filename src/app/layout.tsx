@@ -4,7 +4,7 @@ import { EB_Garamond } from "next/font/google";
 import { clsx } from "clsx";
 import Link from "next/link";
 import { Metadata } from "next";
-import { Analytics } from '@vercel/analytics/react';
+import { Analytics } from "@vercel/analytics/react";
 
 const ebGaramond = EB_Garamond({
   subsets: ["latin"],
@@ -52,7 +52,9 @@ export const metadata: Metadata = {
   },
 };
 
-type RootLayoutProps = React.PropsWithChildren<{}>;
+type RootLayoutProps = {
+  children: React.ReactNode;
+};
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
