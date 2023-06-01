@@ -23,7 +23,7 @@ export async function generateMetadata({
     return;
   }
 
-  const { title, date, description, slug } = post;
+  const { title, createdAt, description, slug } = post;
 
   return {
     title,
@@ -35,7 +35,7 @@ export async function generateMetadata({
       title,
       description,
       type: "article",
-      publishedTime: dayjs(date).toISOString(),
+      publishedTime: dayjs(createdAt).toISOString(),
       url: `https://reactive.so/blog/${slug}`,
       images: [
         {
@@ -73,8 +73,8 @@ export default async function PostPage({ params }: PostPageProps) {
         </h1>
         <div className="flex items-center space-x-2">
           <p className="text-sm font-bold text-neutral-500">
-            <time dateTime={dayjs(post.date).format("YYYY-MM-DD")}>
-              {dayjs(post.date).format("DD/MM/YYYY")}
+            <time dateTime={dayjs(post.createdAt).format("YYYY-MM-DD")}>
+              {dayjs(post.createdAt).format("DD/MM/YYYY")}
             </time>
           </p>
           <div className="w-full h-0.5 bg-neutral-300 dark:bg-neutral-700" />
