@@ -1,10 +1,11 @@
 "use client";
+
 import { useMDXComponent } from "next-contentlayer/hooks";
 import React from "react";
 
-type RenderProps = React.PropsWithChildren<{
+type RenderProps = {
   code: string;
-}>;
+};
 
 export default function Render({ code }: RenderProps) {
   const MDX = useMDXComponent(code);
