@@ -1,7 +1,7 @@
 import React from "react";
 import { notFound } from "next/navigation";
 import { allPosts } from "contentlayer/generated";
-import Render from "@/components/Render";
+import Render from "@/components/render";
 import Balancer from "react-wrap-balancer";
 import dayjs from "dayjs";
 import { Metadata } from "next";
@@ -12,11 +12,19 @@ export async function generateStaticParams() {
   }));
 }
 
+type PostPageProps = {
+  params?: {
+    slug?: string;
+  };
+};
+
 export async function generateMetadata({
   params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata | undefined> {
+}: PostPageProps): Promise<Metadata | undefined> {
+  if (!params?.slug) {
+    return;
+  }
+
   const post = allPosts.find((post) => post.slug === params.slug);
 
   if (!post) {
@@ -32,7 +40,7 @@ export async function generateMetadata({
       keywords: post.tags.join(", "),
     }),
     openGraph: {
-      title,
+      title: `${title} - Reactive`,
       description,
       type: "article",
       publishedTime: dayjs(createdAt).toISOString(),
@@ -51,12 +59,6 @@ export async function generateMetadata({
     },
   };
 }
-
-type PostPageProps = {
-  params?: {
-    slug?: string;
-  };
-};
 
 export default async function PostPage({ params }: PostPageProps) {
   const post = allPosts.find(({ slug }) => slug === params?.slug);
