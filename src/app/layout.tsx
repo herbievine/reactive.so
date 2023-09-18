@@ -47,9 +47,31 @@ export const metadata: Metadata = {
     title: "Reactive",
     card: "summary_large_image",
   },
-  icons: {
-    shortcut: "/favicon.ico",
-  },
+  icons: [
+    {
+      rel: "icon",
+      type: "image/png",
+      sizes: "16x16",
+      url: "/assets/favicon-16x16.png",
+    },
+    {
+      rel: "icon",
+      type: "image/png",
+      sizes: "32x32",
+      url: "/assets/favicon-32x32.png",
+    },
+    {
+      rel: "icon",
+      type: "image/png",
+      sizes: "96x96",
+      url: "/assets/favicon-96x96.png",
+    },
+    {
+      rel: "apple-touch-icon",
+      sizes: "180x180",
+      url: "/assets/apple-touch-icon.png",
+    },
+  ],
 };
 
 type RootLayoutProps = {
