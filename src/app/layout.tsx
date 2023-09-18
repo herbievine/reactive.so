@@ -51,25 +51,8 @@ export const metadata: Metadata = {
     {
       rel: "icon",
       type: "image/x-icon",
+      sizes: "48x48",
       url: "/favicon.ico",
-    },
-    {
-      rel: "icon",
-      type: "image/png",
-      sizes: "16x16",
-      url: "/assets/favicon-16x16.png",
-    },
-    {
-      rel: "icon",
-      type: "image/png",
-      sizes: "32x32",
-      url: "/assets/favicon-32x32.png",
-    },
-    {
-      rel: "icon",
-      type: "image/png",
-      sizes: "96x96",
-      url: "/assets/favicon-96x96.png",
     },
     {
       rel: "apple-touch-icon",
