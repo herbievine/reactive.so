@@ -1,8 +1,8 @@
-import React from "react";
 import { allPosts } from "contentlayer/generated";
 import dayjs from "dayjs";
-import Link from "next/link";
 import { Metadata } from "next";
+import Link from "next/link";
+import React from "react";
 
 export const metadata: Metadata = {
   title: "Home - Reactive",
@@ -13,7 +13,7 @@ export default async function HomePage() {
     <div className="w-full flex flex-col space-y-6">
       {allPosts
         .sort((a, b) =>
-          dayjs(a.createdAt).isAfter(dayjs(b.createdAt)) ? -1 : 1
+          dayjs(a.createdAt).isAfter(dayjs(b.createdAt)) ? -1 : 1,
         )
         .map((p) => (
           <Link key={p.title} href={p.url} className="w-full">
