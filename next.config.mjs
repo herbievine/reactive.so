@@ -1,12 +1,10 @@
-const { withContentlayer } = require("next-contentlayer");
+import "./src/env.mjs";
+import { withContentlayer } from "next-contentlayer";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  experimental: {
-    appDir: true,
-  },
   redirects() {
     return [
       {
@@ -23,4 +21,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withContentlayer(nextConfig);
+export default withContentlayer(nextConfig);

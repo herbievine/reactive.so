@@ -5,6 +5,7 @@ import Render from "@/components/render";
 import Balancer from "react-wrap-balancer";
 import dayjs from "dayjs";
 import { Metadata } from "next";
+import { Feedback } from "@/components/feedback";
 
 export async function generateStaticParams() {
   return allPosts.map(({ slug }) => ({
@@ -82,7 +83,9 @@ export default async function PostPage({ params }: PostPageProps) {
           <div className="w-full h-0.5 bg-neutral-300 dark:bg-neutral-700" />
         </div>
       </div>
+      <Feedback source={post.slug} />
       <Render code={post.body.code} />
+      <Feedback source={post.slug} />
     </div>
   );
 }

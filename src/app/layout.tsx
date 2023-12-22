@@ -13,6 +13,7 @@ const ebGaramond = EB_Garamond({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://reactive.so"),
   title: {
     default: "Reactive",
     template: "%s - Reactive",
@@ -73,7 +74,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body
         className={clsx(
           "bg-neutral-100 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 antialiased",
-          ebGaramond.variable
+          ebGaramond.variable,
         )}
       >
         <div className="w-full mx-auto md:max-w-2xl px-6 py-12 flex flex-col items-center space-y-12">
