@@ -1,10 +1,11 @@
-import React from "react";
 import "@/styles/globals.css";
-import { EB_Garamond } from "next/font/google";
-import { clsx } from "clsx";
-import Link from "next/link";
-import { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { clsx } from "clsx";
+import { Metadata } from "next";
+import { EB_Garamond } from "next/font/google";
+import Link from "next/link";
+import React from "react";
 
 const ebGaramond = EB_Garamond({
   subsets: ["latin"],
@@ -84,6 +85,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <div className="w-full">{children}</div>
         </div>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

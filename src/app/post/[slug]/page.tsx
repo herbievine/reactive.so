@@ -1,11 +1,11 @@
-import React from "react";
-import { notFound } from "next/navigation";
-import { allPosts } from "contentlayer/generated";
+import { Feedback } from "@/components/feedback";
 import Render from "@/components/render";
-import Balancer from "react-wrap-balancer";
+import { allPosts } from "contentlayer/generated";
 import dayjs from "dayjs";
 import { Metadata } from "next";
-import { Feedback } from "@/components/feedback";
+import { notFound } from "next/navigation";
+import React from "react";
+import Balancer from "react-wrap-balancer";
 
 export async function generateStaticParams() {
   return allPosts.map(({ slug }) => ({
