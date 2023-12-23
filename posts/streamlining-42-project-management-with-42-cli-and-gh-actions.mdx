@@ -1,0 +1,250 @@
+---
+title: "Streamlining 42 Project Management with 42 CLI and GitHub Actions"
+description: "A deep dive into the 42 project so_long, including the MLX library, parsing, and error handling."
+tags:
+  [
+    "42",
+    "ci",
+    "cd",
+    "unix",
+    "linux",
+    "c",
+    "guide",
+    "tutorial",
+    "mlx",
+    "x11",
+    "cpp",
+  ]
+createdAt: 2023-12-23
+updatedAt: 2023-12-23
+---
+
+Managing multiple 42 projects can be a daunting task, especially when they reside in a single Git repository. The good news? A powerful tool exists to streamline your workflow: 42 CLI. In this guide, we'll explore how this tool, akin to a Makefile designed for 42 projects, integrates seamlessly with GitHub Actions for an enhanced development experience.
+
+## Introduction to 42 CLI
+
+Managing the intricacies of multiple 42 projects within a unified Git repository can be an overwhelming challenge. In this section, we'll take a closer look at what 42 CLI is and how it can revolutionise the way you handle your 42 projects.
+
+### Unpacking 42 CLI
+
+42 CLI, short for Command Line Interface, emerges as a specialised tool tailored for efficient project management within the 42 ecosystem. It serves as a bridge between your development environment and the unique requirements of 42 projects, providing a cohesive and streamlined approach to handling various tasks.
+
+At its core, 42 CLI operates as a Makefile-like utility but with a specific focus on the intricacies of 42 projects. Whether you need to compile your code, run tests, or manage dependencies, 42 CLI simplifies these operations into a set of commands that seamlessly integrate into your development workflow.
+
+### Notable Features
+
+Let's explore some of the standout features that make 42 CLI a must-have tool for 42 project development:
+
+- **Project Management:** With 42 CLI, you can effortlessly manage multiple projects within a single repository. Its intuitive commands allow you to switch between projects, execute scripts, and maintain a consistent workflow.
+- **Custom Scripts:** 42 CLI lets you define custom scripts for common development tasks. These scripts, specified in the `42-cli.toml` configuration file, enhance automation and reduce the manual effort required for repetitive actions.
+- **Test Integration:** Testing is a crucial aspect of software development, and 42 CLI simplifies the integration of test suites into your projects. Define test scripts in your configuration file and let 42 CLI handle the execution.
+- **GitHub Actions Compatibility:** Harness the power of CI by seamlessly integrating 42 CLI into GitHub Actions workflows. Automate your build and test processes with ease.
+
+## Getting Started with 42 CLI
+
+Now that you're intrigued by the possibilities 42 CLI brings to the table, let's dive into the practical aspects of getting started with this tool. This section will guide you through the installation process, provide insights into creating a configuration file, and showcase some fundamental commands to kickstart your 42 CLI journey. To explore advanced features, refer to the [official 42 CLI documentation](https://github.com/herbievine/42-cli).
+
+### Installation
+
+Before harnessing the power of 42 CLI, ensure you meet the prerequisites:
+
+- [Rust](https://www.rust-lang.org/tools/install)
+- [Norminette](https://github.com/42School/norminette) (Optional)
+
+Install 42 CLI from GitHub or [crates.io](http://crates.io/):
+
+```bash
+# From GitHub
+cargo install --git https://github.com/herbievine/42-cli.git
+
+# From crates.io
+cargo install ftcli
+
+```
+
+For convenience, optionally add an alias for 42 CLI to your shell configuration file:
+
+```bash
+alias ft="ftcli"
+```
+
+### Configuration File
+
+Create a `42-cli.toml` configuration file in the root of each 42 project:
+
+```toml
+# The name of the project
+name = "my_awesome_project"
+
+[scripts]
+build = { cmd = "make" }
+run = [
+  { cmd = "./my_executable arg1 arg2" },
+  { cmd = "./my_executable another_arg" },
+]
+
+```
+
+Customise the settings based on your project's requirements.
+
+## GitHub Actions Integration
+
+Integrating 42 CLI into your GitHub repository workflow is a straightforward process. By using GitHub Actions, you can automate the build, lint, and test processes with each push or pull request. Below is an example GitHub Actions workflow file (`.github/workflows/ci.yml`) that you can use as a starting point:
+
+```yaml
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  ci:
+    name: CI
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Step 2: Install GCC and Make
+      - name: Install GCC and Make dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq gcc make
+
+      # Step 3: Install Rust
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+
+      # Step 4: Install Python
+      - name: Install Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      # Step 5: Install sccache
+      - name: Install sccache
+        uses: mozilla-actions/sccache-action@v0.0.3
+        with:
+          token: ${{ github.token }}
+
+      # Step 6: Install 42 CLI
+      - name: Install 42 CLI
+        run: cargo install ftcli
+        env:
+          SCCACHE_GHA_ENABLED: "true"
+          RUSTC_WRAPPER: "sccache"
+          CARGO_NET_GIT_FETCH_WITH_CLI: "true"
+
+      # Step 7: Install Norminette
+      - name: Install Norminette
+        run: |
+          python3 -m pip install --upgrade pip setuptools
+          pip install norminette
+
+      # Step 8: Build the project
+      - name: Build
+        run: ftcli build
+
+      # Step 9: Clean the project
+      - name: Clean
+        run: ftcli clean
+
+      # Step 10: Lint the code
+      - name: Lint
+        run: ftcli lint
+```
+
+This workflow covers essential steps, including setting up the Rust and Python environments, installing necessary tools and dependencies, and executing build, clean, and lint commands using 42 CLI. Customise it based on your project's specific requirements. For further details and customisation options, for projects which include the MLX or the CPP modules, refer to the [42 CLI GitHub repository](https://github.com/herbievine/42-cli).
+
+> Note: `sscache` is used here to cache compiled Rust code
+
+## Practical Examples
+
+In this section, we'll delve into practical examples showcasing the versatility of 42 CLI. From project management to testing suites, these real-world scenarios will demonstrate how 42 CLI becomes an indispensable tool in your development arsenal.
+
+### Project Management Made Easy
+
+Let's start with a fundamental use case: managing the build, run, clean, and lint processes in your projects. The `42-cli.toml` configuration file is the linchpin for orchestrating these tasks.
+
+```toml
+name = "so_long"
+
+[scripts]
+build = { cmd = "make", mlx = true, mlx_dir = "minilibx" }
+run= [{ cmd = "./so_long maps/small.ber" }]
+clean = { cmd = "make fclean", mlx = true, mlx_dir = "minilibx" }
+lint = { cmd = "norminette ." }
+```
+
+- **Build Script**: Defines the build process using `make`, and optionally installs MLX in the specified directory.
+- **Run Script**: Executes the project, running additional build steps if specified.
+- **Clean Script**: Cleans up project artifacts, including optional MLX cleanup.
+- **Lint Script**: Runs Norminette for code linting.
+
+### Running Tests
+
+For projects with extensive testing suites, 42 CLI seamlessly integrates into your testing workflow. In this example with `ft_printf`, the `test` script automates the testing process.
+
+```toml
+name = "ft_printf"
+
+[scripts]
+build = { cmd = "make" }
+test = [
+  { cmd = "git clone https://github.com/Tripouille/printfTester.git tester" },
+  { cmd = "make m", dir = "tester" },
+  { cmd = "rm -rf tester" }
+]
+clean = { cmd = "make fclean" }
+lint = { cmd = "norminette ." }
+```
+
+- **Test Script**: Automates the testing process using the `printfTester` suite.
+- **Sequential Execution**: The test script executes build and clean scripts sequentially.
+
+### Cross-Project Automation
+
+To automate deployments or run commands across multiple projects effortlessly, you should have a project structure like this:
+
+```
+42/
+├─ libft/
+│  ├─ 42-cli.toml
+├─ ft_printf/
+│  ├─ 42-cli.toml
+├─ get_next_line/
+│  ├─ 42-cli.toml
+├─ 42-cli.toml
+```
+
+Then in your root `42-cli.toml`, reference all your projects:
+
+```toml
+name = "42"
+projects = [ "libft", "ft_printf", "get_next_line" ]
+
+[scripts]
+```
+
+- **Centralized Commands**: Execute commands simultaneously across listed projects.
+- **Skip Absent Projects**: Projects not containing a `42-cli.toml` file are gracefully skipped.
+
+## Conclusion
+
+42 CLI proves to be a valuable asset for 42 project development. With its simplicity and versatility, it streamlines workflows, enhances efficiency, and seamlessly integrates with GitHub Actions for effective CI.
+
+As you incorporate 42 CLI into your projects, its user-friendly nature empowers both seasoned developers and coding newcomers. Experiment with configurations, tailor it to your needs, and witness a more efficient coding experience.
+
+Whether you're navigating complex coding challenges or fine-tuning your projects, 42 CLI is a reliable companion. Utilize its capabilities, improve your workflows, and elevate your coding journey.
+
+Happy coding! 🚀
