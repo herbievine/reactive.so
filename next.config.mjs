@@ -19,6 +19,16 @@ const nextConfig = {
       },
     ];
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "penkle.com",
+        port: "",
+        pathname: "/**",
+      },
+    ],
+  },
 };
 
 export default withContentlayer(nextConfig);
