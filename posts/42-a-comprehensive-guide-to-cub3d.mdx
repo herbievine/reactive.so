@@ -1,0 +1,102 @@
+---
+title: "42: A Comprehensive Guide to Cub3D"
+description: "A comprehensive guide to the Cub3D project from 42."
+tags: ["42", "cub3d", "raycasting", "graphics", "guide", "tutorial"]
+createdAt: 2024-03-31
+updatedAt: 2024-03-31
+---
+
+Cub3D is basically `so_long`'s big brother, as it shares many core features like flood filling a map, handling key press events, and rendering images to the screen. However, as we’ll see later on, there are many functionalities which have completely changed in comparison.
+
+## Understanding Ray Casting
+
+Ray casting lies at the heart of Cub3D, enabling the creation of a 3D environment using 2D graphics techniques. By simulating the projection of rays from the player's viewpoint, we can achieve the illusion of depth and perspective. With a bit of fancy math, we can transform those rays into visible walls, and finally — _with a bit more math —_ into textures.
+
+Here is a graphical example which hopefully illustrates the idea a bit better.
+
+![Example of ray casting (bird’s eye view)](/assets/posts/ray-casting-example.png)
+
+If you want a more in-depth explanation into the math behind all this, I highly suggest watching [this short YouTube video](https://www.youtube.com/watch?v=gYRrGTC7GtA) from 3DSage.
+
+## Implementation Details
+
+Although I’ve been referring to ray casting as the sole culprit to this project, it’s not the only piece of the puzzle, and you will later find out it’s the easiest!
+
+### Setting Up the Environment
+
+Before delving into the implementation, you'll need to set up your development environment. Cub3D leverages the MinilibX library for graphics rendering. Ensure that you have the necessary tools installed and familiarize yourself with the project's requirements and constraints.
+
+If you need help with this, I built a tool called [42-cli](https://github.com/herbievine/42-cli) which streamlines the MLX installation process for you. You can checkout how I implemented this in [this](https://reactive.so/post/42-a-comprehensive-guide-to-so_long) article (works on both MacOS and Linux)
+
+### Handling the Textures
+
+In `so_long`, we simply rendered our images using the built-in function from the MLX. However, as we are now in a 3D world, we need to compute which pixels get rendered ourselves. For this, we can simply discard our textures after initialisation, after storing them in a buffer. The buffer will be an array of integers, where each integer represents the colour of a pixel.
+
+I found the best way to do this is to have the following data type.
+
+```c
+#define NUM_TEXTURES 4
+
+typedef struct s_data
+{
+	// ...
+	int *texture_buffer[NUM_TEXTURES];
+} t_data
+```
+
+So imagine you have a texture of `64x64`, the size of `texture_buffer[x]` will be `sizeof(int) * 64 * 64`. To access a pixel, you can use the following formula: `texture_buffer[x][y * 64 + x]`. This skips `y` rows by multiplying the width of the texture, and then adds `x` to get the pixel.
+
+To get a pixel value from a MLX image pointer, you need to use the `mlx_get_data_addr` function, and you can access a pixel like this: `img->addr[y * img->width + x]`. I recommend reading [the docs](https://harm-smits.github.io/42docs/libs/minilibx/prototypes.html#mlx_get_data_addr) for this function to understand how and why it works.
+
+<Ad
+  title="Penkle Analytics"
+  description="Simplify insights, respect privacy, and thrive as an indie hacker with our intuitive analytics platform."
+  url="https://penkle.com"
+  image="https://penkle.com/media/ad.png"
+/>
+
+### The Pixel Map
+
+We used a pixel map, which represents the pixels you see in the window on a 1-1 scale. So right after a ray is casted and the wall height is determined, we calculate each pixel for that given ray.
+
+After the whole ray casting is performed, we can draw all the non-zero values in the map. All zero values are drawn depending on the ceiling or floor colour.
+
+> Note: This is not our solution. I will link the explanation and the maths below.
+
+### Optimising Performance
+
+Like the above example with our image manipulation, we will also leverage MLX’s image functionality instead of drawing each pixel individually. We will do this to avoid slow renders and jagged re-renders. This is a small snippet to help you get started:
+
+```c
+t_img image;
+
+image.img = mlx_new_image(mlx_ptr, WIN_WIDTH, WIN_HEIGHT);
+if (image.img == NULL)
+		return;
+image.addr = (int *)mlx_get_data_addr(image.img, &image.bpp,
+	&image.line_length, &image.endian);
+
+// Assign RGB value to a pixel
+image.addr[y * (image.line_length / 4) + x] = 0x00FF00;
+```
+
+So instead of drawing each pixel individually, you can assign the colour to the pixel in the image buffer, and then draw the whole image to the screen at once. This prevents the screen from flickering and speeds up the rendering process.
+
+## Common Mistakes
+
+- Try to understand the math, or at least a _small part_ of it. Not understanding what’s happening will simply slow down debugging.
+- Make sure you can move with a continuous key press — I don’t want to click `W` a thousand times…
+- Implementing variable move speed and rotation speed. It will prevent your program from running like the speed of light on X’s computer, and as slow as a snail on Y’s computer.
+
+## Conclusion
+
+Cub3D is a fun project, and I hope this article cleared a few questions up and guided you in the right direction. Happy coding!
+
+Herbie ✌️
+
+## Additional Resources
+
+- [Our Article for `so_long`](https://reactive.so/post/42-a-comprehensive-guide-to-so_long)
+- [Introduction to Raycasting by Lode Vandevenne](https://lodev.org/cgtutor/raycasting.html)
+- [Raycasting in 2D by 3DSage](https://www.youtube.com/watch?v=gYRrGTC7GtA)
+- [42-CLI by Herbie Vine](https://github.com/herbievine/42-cli)
