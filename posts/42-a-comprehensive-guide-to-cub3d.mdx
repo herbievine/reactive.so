@@ -18,11 +18,9 @@ Here is a graphical example which hopefully illustrates the idea a bit better.
 
 ![Example of ray casting (bird’s eye view)](/assets/posts/ray-casting-example.png)
 
-If you want a more in-depth explanation into the math behind all this, I highly suggest watching [this short YouTube video](https://www.youtube.com/watch?v=gYRrGTC7GtA) from 3DSage.
-
 ## Implementation Details
 
-Although I’ve been referring to ray casting as the sole culprit to this project, it’s not the only piece of the puzzle, and you will later find out it’s the easiest!
+Although I’ve been referring to ray casting as the sole culprit to this project, it’s not the only piece of the puzzle! You will have to implement a lot of other functionalities, such as handling image buffers and texture colouring, to create a fully functional 3D environment.
 
 ### Setting Up the Environment
 
@@ -75,7 +73,7 @@ This gives us the distance the ray must travel to reach the next grid line in ea
 
 #### Step 3: Calculating the Step and Initial Side Distances
 
-Now we need to calculate the `stepX`, `stepY` and the initial side distances for the ray. The `stepx` and `stepy` variables determine the direction in which the ray moves through the grid.
+Now we need to calculate the `step_x`, `step_y` and the initial side distances for the ray. The `step_x` and `step_y` variables determine the direction in which the ray moves through the grid.
 
 The `side_dist_x` and `side_dist_y` variables represent initially the distance the ray must travel from its current position to the next grid line in the x or y direction. Later these variables will be updated with the delta distance as the ray moves through the grid.
 
@@ -204,7 +202,7 @@ typedef struct s_data
 } t_data
 ```
 
-So imagine you have a texture of `64x64`, the size of a `texture_buffer` will be `sizeof(int) * 64 * 64`. To access a pixel, you can use the following formula: `texture_buffer[y * 64 + x]`. This skips `y` rows by multiplying the width of the texture, and then adds `x` to get the pixel.
+So imagine you have a texture of `64x64`, the size of a `texture_buffer[n]` will be `sizeof(int) * 64 * 64`. To access a pixel, you can use the following formula: `texture_buffer[n][y * 64 + x]`. This skips `y` rows by multiplying the width of the texture, and then adds `x` to get the pixel.
 
 To get a pixel value from a MLX image pointer, you need to use the `mlx_get_data_addr` function, and you can access a pixel like this: `img->addr[y * img->width + x]`. I recommend reading [the docs](https://harm-smits.github.io/42docs/libs/minilibx/prototypes.html#mlx_get_data_addr) for this function to understand how and why it works.
 
