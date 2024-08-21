@@ -5,3 +5,7 @@
 /* [data-rehype-pretty-code-fragment] > pre {
   @apply font-semibold
 } */
+
+* {
+  font-family: "Fira Code";
+}

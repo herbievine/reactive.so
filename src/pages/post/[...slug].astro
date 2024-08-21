@@ -1,0 +1,58 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import Meta from '@/components/meta.astro';
+import dayjs from "dayjs";
+
+export async function getStaticPaths() {
+	const posts = await getCollection('posts');
+
+	return posts.map((post) => ({
+		params: { slug: post.slug },
+		props: post,
+	}));
+}
+
+type Props = CollectionEntry<'blog'>;
+
+const post = Astro.props;
+const { Content } = await post.render();
+---
+
+<html lang="en">
+	<head>
+		<Meta title="Reactive" description="A blog about programming concepts and technologies" slug={`/static/${post.slug}.png`} />
+	</head>
+  <body class="bg-neutral-100 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 antialiased">
+    <main class="w-full mx-auto md:max-w-2xl px-6 py-12 flex flex-col space-y-12">
+      <a href="/" class="w-min text-md font-semibold text-neutral-800 dark:text-neutral-200">
+				reactive.so
+			</a>
+      <div class="w-full flex flex-col space-y-6">
+        <div class="w-full flex flex-col space-y-2">
+          <h1 class="text-2xl font-semibold">
+            <!-- <Balancer> -->
+              {post.data.title}
+            <!-- </Balancer> -->
+          </h1>
+          <div class="flex items-center space-x-2">
+            <p class="text-sm font-bold text-neutral-500">
+              <time datetime={dayjs(post.data.createdAt).format("YYYY-MM-DD")}>
+                {dayjs(post.data.createdAt).format("DD/MM/YYYY")}
+              </time>
+            </p>
+            <div class="w-full h-0.5 bg-neutral-300 dark:bg-neutral-700" />
+          </div>
+        </div>
+        <article class="prose prose-neutral dark:prose-invert font-mono">
+          <Content />
+        </article>
+        <!-- <Feedback source={post.slug} />
+        <Render code={post.body.code} />
+        <Feedback source={post.slug} /> -->
+      </div>
+    </main>
+    {/* <Analytics />
+    <PenkleAnalytics domain="reactive.so" />
+    <SpeedInsights /> */}
+  </body>
+</html>

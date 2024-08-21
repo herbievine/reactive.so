@@ -1,17 +1,15 @@
-const defaultTheme = require('tailwindcss/defaultTheme')
+const defaultTheme = require("tailwindcss/defaultTheme");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: 'media',
-  content: ["./src/**/*.{js,ts,jsx,tsx}",],
+  darkMode: "media",
+  content: ["./src/**/*.{astro,js,ts,jsx,tsx}"],
   theme: {
     extend: {
       fontFamily: {
-        serif: ['var(--eb-garamond)', ...defaultTheme.fontFamily.serif]
-      }
+        mono: ["Fira Code", ...defaultTheme.fontFamily.serif],
+      },
     },
   },
-  plugins: [
-    require('@tailwindcss/typography'),
-  ],
-}
+  plugins: [require("@tailwindcss/typography")],
+};
