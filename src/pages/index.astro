@@ -1,0 +1,36 @@
+---
+import { getCollection } from "astro:content";
+import Meta from "@/components/meta.astro"
+import dayjs from "dayjs";
+
+const posts = await getCollection("posts");
+---
+
+<html lang="en">
+	<head>
+		<Meta title="Reactive" description="A blog about programming concepts and technologies" />
+	</head>
+	<body class="bg-neutral-100 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 antialiased">
+		<main class="w-full mx-auto md:max-w-2xl px-6 py-12 flex flex-col space-y-12">
+			<a href="/" class="w-min text-md font-semibold text-neutral-800 dark:text-neutral-200">
+				reactive.so
+			</a>
+			<div class="w-full flex flex-col space-y-6">
+				{posts
+					.sort((a, b) =>
+						dayjs(a.data.createdAt).isAfter(dayjs(b.data.createdAt)) ? -1 : 1,
+					)
+					.map((p) => (
+						<a href={new URL(`/post/${p.slug}`, Astro.url)} class="w-full">
+							<div class="flex flex-col space-y-1">
+								<h2 class="text-lg font-semibold text-neutral-800 dark:text-neutral-200">{p.data.title}</h2>
+								<p class="text-sm font-semibold text-neutral-500">
+									{dayjs(p.data.createdAt).format("DD/MM/YYYY")}
+								</p>
+							</div>
+						</a>
+					))}
+			</div>
+		</main>
+	</body>
+</html>

@@ -16,7 +16,7 @@ Ray casting lies at the heart of Cub3D, enabling the creation of a 3D environmen
 
 Here is a graphical example which hopefully illustrates the idea a bit better.
 
-![Example of ray casting (bird’s eye view)](/assets/posts/ray-casting-example.png)
+![Example of ray casting (bird’s eye view)](/static/assets/ray-casting-example.png)
 
 ## Implementation Details
 
@@ -55,7 +55,7 @@ Here we calculate the direction of the ray based on the player’s direction (`d
 
 The next step in the raycasting algorithm is to calculate the delta distance between two consecutive x or y intersections with a grid line. This is done by determining the distance the ray must travel to reach the next grid line in the x or y direction.
 
-![Example of delta dist x and y](/assets/posts/delta-dist-example.png)
+![Example of delta dist x and y](/static/assets/delta-dist-example.png)
 
 ```c
 	// ...
