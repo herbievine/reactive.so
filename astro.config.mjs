@@ -5,6 +5,6 @@ import tailwind from "@astrojs/tailwind";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://reactive.so",
+  site: "https://https://reactive-so.pages.dev",
   integrations: [mdx(), sitemap(), tailwind()],
 });
