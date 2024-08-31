@@ -1,0 +1,122 @@
+---
+title: "42: A Comprehensive Guide to ft_irc"
+description: "A comprehensive guide to the ft_irc project from 42."
+author: { name: "Herbie Vine", url: "https://herbievine.com" }
+contributors: []
+tags: ["42", "ft_irc", "irc", "guide", "tutorial"]
+createdAt: 2024-08-31
+updatedAt: 2024-08-31
+---
+
+## Introduction
+
+`ft_irc` is a project which you may do during your cursus, and if you're reading this then I assume you are. It's a cool project, and resolves around you developing an IRC (Internet Relay Chat) server. It's not that hard, although it will challenge your understanding of communcation
+
+## Understanding the project scope
+
+There are three fundamental pillars in this project.
+
+- **The Server:** This component manages critical server information such as active socket connections, connected clients and their respective FDs, channels, the current port/password, etc... It's responsible for maintaining the state of the server and handling incoming and outgoing messages between clients.
+- **The Channel:** This is where clients gather to chat. The "Channel" manages channel-specific data such as the channel name, password, client limits, and topic. It handles adding and removing clients, broadcasting messages, and enforcing channel rules. Channels also keep track of operators and invited clients, ensuring proper access control and communication within the channel.
+
+These components work together to create a functional IRC server where clients can connect, join channels, and communicate in real-time. In the following sections, we will explore each of these pillars in more detail, understanding their roles and how they interact within the `ft_irc` server.
+
+### The server
+
+In ft_irc, the server is integral to managing socket connections, which form the backbone of the server-client communication. The server uses sockets to handle incoming and outgoing data, enabling real-time interactions between clients and the IRC network.
+
+Socket Management begins with creating and binding a listening socket. This socket listens for incoming connection requests from clients. Once a connection is established, the server uses another socket to communicate with the client. Managing these sockets involves several steps: creating the socket, binding it to a port, listening for incoming connections, and accepting those connections. Each accepted connection is then handled by a new socket, allowing multiple clients to interact with the server concurrently.
+
+Here's a basic example demonstrating how to accept connections and read data from clients using sockets:
+
+```cpp
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <iostream>
+#include <cstring>
+
+int main() {
+    int server_fd, client_fd;
+    struct sockaddr_in server_addr, client_addr;
+    socklen_t client_addr_len = sizeof(client_addr);
+    char buffer[1024];
+    int port = 6667;  // Default IRC port
+
+    // Create the server socket
+    server_fd = socket(AF_INET, SOCK_STREAM, 0);
+    if (server_fd < 0) {
+        perror("socket");
+        return 1;
+    }
+
+    // Set up the server address struct
+    memset(&server_addr, 0, sizeof(server_addr));
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_addr.s_addr = INADDR_ANY;
+    server_addr.sin_port = htons(port);
+
+    // Bind the socket to the address and port
+    if (bind(server_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
+        perror("bind");
+        close(server_fd);
+        return 1;
+    }
+
+    // Listen for incoming connections
+    if (listen(server_fd, 5) < 0) {
+        perror("listen");
+        close(server_fd);
+        return 1;
+    }
+
+    std::cout << "Server listening on port " << port << std::endl;
+
+    // Accept a connection
+    client_fd = accept(server_fd, (struct sockaddr *)&client_addr, &client_addr_len);
+    if (client_fd < 0) {
+        perror("accept");
+        close(server_fd);
+        return 1;
+    }
+
+    std::cout << "Client connected" << std::endl;
+
+    // Read data from the client
+    ssize_t bytes_read = read(client_fd, buffer, sizeof(buffer) - 1);
+    if (bytes_read < 0) {
+        perror("read");
+        close(client_fd);
+        close(server_fd);
+        return 1;
+    }
+
+    buffer[bytes_read] = '\0';  // Null-terminate the buffer
+    std::cout << "Received message: " << buffer << std::endl;
+
+    // Close the client and server sockets
+    close(client_fd);
+    close(server_fd);
+
+    return 0;
+}
+```
+
+This is a simple program you can copy and run locally to test out (after reading the code and making it's not malware of course). You can test it out by running `nc 127.0.0.1 6697` in a separate terminal window. You can input anything you want and you'll notice back in your server logs your input is printed. Here is a quick breakdown of the code:
+
+- Socket Creation: The function `socket(2)` is used to create a TCP socket for the server. It establishes a communication endpoint for the server to listen for client connections.
+- Binding: The function `bind(2)` binds the created socket to a specific port and IP address, as defined in the struct `sockaddr_in`. This associates the socket with a network address.
+- Listening: The `listen(2)` function prepares the socket to accept incoming connections. It specifies the maximum number of connections that can be queued for acceptance.
+- Accepting Connections: The `accept(2)` function waits for a client to connect. When a connection is established, it creates a new socket (referred to as client_fd) to handle the communication with the connected client.
+- Reading Data: The `read(2)` function is used to read data from the client socket. It retrieves data sent by the client, which can then be processed by the server.
+
+This basic setup demonstrates how to handle client connections and read data in a straightforward manner. You'll need to adapt this code to suite the complexity of your server!
+
+### Channels
+
+A channel represents the core of group communication, allowing multiple clients to gather and interact in a shared space. Channels are akin to chat rooms where users can join, send messages, and participate in discussions. The channel is responsible for managing these interactions, enforcing rules, and maintaining the integrity of the group communication environment.
+
+Channels also have an important role in maintaining integrity, security, and synchronicity within the IRC server by enforcing access controls, managing permissions, and ensuring consistent communication among clients. They help uphold the defined rules, such as keeping unauthorized users out of invite-only channels, and maintaining a structured flow of information between clients.
+
+Channels work to synchronize message delivery, ensuring that all clients within the channel receive messages in the correct order and without duplication, thus maintaining the flow of conversation. They also safeguard the channel environment by allowing operators to moderate content, set topics, and manage user behavior, ensuring that the space remains orderly and adheres to the intended purpose.
