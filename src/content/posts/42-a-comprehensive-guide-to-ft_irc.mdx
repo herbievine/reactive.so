@@ -8,26 +8,25 @@ createdAt: 2024-08-31
 updatedAt: 2024-08-31
 ---
 
-## Introduction
+`ft_irc` is a project which you may do during your cursus, and if you’re reading this then I assume you are. It’s a cool project, and resolves around you developing an IRC (Internet Relay Chat) server. While it’s a manageable project, it will challenge and expand your understanding of bi-directional file-descriptor communication (aka sockets).
 
-`ft_irc` is a project which you may do during your cursus, and if you're reading this then I assume you are. It's a cool project, and resolves around you developing an IRC (Internet Relay Chat) server. It's not that hard, although it will challenge your understanding of bi-directional file-descriptor communication.
+If you don’t know what IRC is, here’s a TL;DR: it’s a simple and robust protocol built to host communities. Think of it as an early predecessor to modern platforms like Discord or Slack, but with a key difference: IRC is open, meaning anyone can create a server or build a client, giving users complete control over their chat environment, without relying on third-party services.
 
 ## Understanding the project scope
 
-There are three fundamental pillars in this project.
+I like to separate this project under four fundamental pillars: the server, the command parser, the channels, and the client (not the actual IRC client you will use to connect to the server, but a class which represents a “connection”, which I refer to a client). Each of these components plays a crucial role in creating a functional IRC server that allows clients to connect, communicate, and interact in real-time. Let’s break down each of these components to understand their roles and how they work together to create an awesome space to chat!
 
-- **The Server:** This component manages critical server information such as active socket connections, connected clients and their respective FDs, channels, the current port/password, etc... It's responsible for maintaining the state of the server and handling incoming and outgoing messages between clients.
-- **The Channel:** This is where clients gather to chat. The "Channel" manages channel-specific data such as the channel name, password, client limits, and topic. It handles adding and removing clients, broadcasting messages, and enforcing channel rules. Channels also keep track of operators and invited clients, ensuring proper access control and communication within the channel.
+Here’s a little diagram of how I personally developed this, mainly focusing on the OOP structure of the project:
 
-These components work together to create a functional IRC server where clients can connect, join channels, and communicate in real-time. In the following sections, we will explore each of these pillars in more detail, understanding their roles and how they interact within the `ft_irc` server.
+![Overview of the project, detailing mainly the OOP structure](/static/assets/irc-global-overview.png)
 
 ### The server
 
-In ft_irc, the server is integral to managing socket connections, which form the backbone of the server-client communication. The server uses sockets to handle incoming and outgoing data, enabling real-time interactions between clients and the IRC network.
+The server is integral to managing socket connections, which forms the backbone of the server-client communication, as well as safeguarding top-level variables such as the server password. The server uses sockets to handle incoming and outgoing data, enabling real-time interactions between clients and the IRC network.
 
-Socket Management begins with creating and binding a listening socket. This socket listens for incoming connection requests from clients. Once a connection is established, the server uses another socket to communicate with the client. Managing these sockets involves several steps: creating the socket, binding it to a port, listening for incoming connections, and accepting those connections. Each accepted connection is then handled by a new socket, allowing multiple clients to interact with the server concurrently.
+Socket management begins with creating and binding a listening socket. This socket listens for incoming connection requests from clients. Once a connection is established, the server uses another socket to communicate with the client. Managing these sockets involves several steps: creating the socket, binding it to a port, listening for incoming connections, and accepting those connections. Each accepted connection is then handled by a new socket, allowing multiple clients to interact with the server concurrently.
 
-Here's a basic example demonstrating how to accept connections and read data from clients using sockets:
+Here’s a basic example demonstrating how to accept connections and read data from a client using a socket:
 
 ```cpp
 #include <sys/types.h>
@@ -42,7 +41,7 @@ int main() {
     struct sockaddr_in server_addr, client_addr;
     socklen_t client_addr_len = sizeof(client_addr);
     char buffer[1024];
-    int port = 6667;  // Default IRC port
+    int port = 6667; // Default IRC port
 
     // Create the server socket
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -53,9 +52,9 @@ int main() {
 
     // Set up the server address struct
     memset(&server_addr, 0, sizeof(server_addr));
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = INADDR_ANY;
-    server_addr.sin_port = htons(port);
+    server_addr.sin_family = AF_INET; // Set the address family to IPv4
+    server_addr.sin_addr.s_addr = INADDR_ANY; // Bind to all available interfaces
+    server_addr.sin_port = htons(port); // Convert the port to network byte order
 
     // Bind the socket to the address and port
     if (bind(server_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
@@ -92,7 +91,7 @@ int main() {
         return 1;
     }
 
-    buffer[bytes_read] = '\0';  // Null-terminate the buffer
+    buffer[bytes_read] = '\0'; // Null-terminate the buffer
     std::cout << "Received message: " << buffer << std::endl;
 
     // Close the client and server sockets
@@ -103,7 +102,7 @@ int main() {
 }
 ```
 
-This is a simple program you can copy and run locally to test out (after reading the code and making it's not malware of course). You can test it out by running `nc 127.0.0.1 6697` in a separate terminal window. You can input anything you want and you'll notice back in your server logs your input is printed. Here is a quick breakdown of the code:
+This is a simple program you can copy and run locally (after reading the code and making it’s not malware of course!). You can test it out by running it in the background and running `nc 127.0.0.1 6697` in a separate terminal window. You can input anything you want into `STDIN` and you’ll notice back in your server logs your input is printed. Here is a quick explanation of the code:
 
 - Socket Creation: The function `socket(2)` is used to create a TCP socket for the server. It establishes a communication endpoint for the server to listen for client connections.
 - Binding: The function `bind(2)` binds the created socket to a specific port and IP address, as defined in the struct `sockaddr_in`. This associates the socket with a network address.
@@ -111,12 +110,60 @@ This is a simple program you can copy and run locally to test out (after reading
 - Accepting Connections: The `accept(2)` function waits for a client to connect. When a connection is established, it creates a new socket (referred to as client_fd) to handle the communication with the connected client.
 - Reading Data: The `read(2)` function is used to read data from the client socket. It retrieves data sent by the client, which can then be processed by the server.
 
-This basic setup demonstrates how to handle client connections and read data in a straightforward manner. You'll need to adapt this code to suite the complexity of your server!
+This basic setup demonstrates how to handle client connections and read data in a straightforward manner. You’ll need to adapt this code just a bit to suite the complexity of your server—it would be too easy if I just gave it to you, right?
+
+### Parsing the input
+
+After you create a socket and manage active connections, you need a way to parse incoming commands and send them to the correct service for handling. This of course doesn’t require much work, mostly if-else is OK.
+
+However, this is the part where you might want to handle a global authentication wall, as most commands are not accessible to non-registered users. A basic setup required for the subject is a 3-tier auth state, from `UNAUTHENTICATED`, to `AUTHENTICATED`, and finally to `REGISTERED`.
+
+![Example of the flow of information, from raw command to reply](/static/assets/irc-command-flow.png)
 
 ### Channels
 
-A channel represents the core of group communication, allowing multiple clients to gather and interact in a shared space. Channels are akin to chat rooms where users can join, send messages, and participate in discussions. The channel is responsible for managing these interactions, enforcing rules, and maintaining the integrity of the group communication environment.
+Channels are the heart of group communication on your IRC server—they're the rooms where clients gather, chat, and interact in real-time. Think of channels as virtual spaces, each with its own set of rules, members, and vibe.
 
-Channels also have an important role in maintaining integrity, security, and synchronicity within the IRC server by enforcing access controls, managing permissions, and ensuring consistent communication among clients. They help uphold the defined rules, such as keeping unauthorized users out of invite-only channels, and maintaining a structured flow of information between clients.
+Each channel is identified by a name (prefixed with a `#`, like `#general`) and can have various attributes such as a topic, a list of operators, a user limit, and even a password for restricted access. So when a user joins a channel, they're subject to the channel's specific rules and permissions.
 
-Channels work to synchronize message delivery, ensuring that all clients within the channel receive messages in the correct order and without duplication, thus maintaining the flow of conversation. They also safeguard the channel environment by allowing operators to moderate content, set topics, and manage user behavior, ensuring that the space remains orderly and adheres to the intended purpose.
+The channel is responsible for maintaining a list of members, tracking which users are in the room at any given time, and ensuring the rules are enforced. This includes managing operator privileges, which allow certain users to kick or ban others, set topics, and tweak channel settings.
+
+Channels also manage the flow of messages. When a user sends a message to a channel, the channel must ensure that the message is broadcasted to all members of the channel. This message synchronisation ensures everyone is on the same page, maintaining the natural rhythm of the conversation.
+
+Another key aspect of channels is their ability to control access. Channels can be open to all, invite-only, or password-protected. These settings are applies differently too, some upon initialisation, and others with the `MODE` command. I’ll let you figure that one out.
+
+### Clients
+
+In the context of the server, a "Client" isn't just a person sitting behind an IRC client like HexChat or irssi—it's actually a representation of a connection to the server, abstracted into a class that manages the state of each user interacting with the IRC network.
+
+The client class handles all the crucial data tied to each user: their nickname, username, hostname, real name, FD, and importantly, their current authentication state. As users progress through the connection lifecycle—from initial connection, to setting their nickname and username, and finally registering with the server—the client class helps track and enforce these states to ensure smooth server operations.
+
+This class is also responsible for managing which channels the user is currently in, handling incoming and outgoing messages, and maintaining a correct status of the user’s activity on the server. For example, when a user sends a message, the client must ensures that the message is formatted correctly and sent to the intended recipient(s), whether that’s another user or an entire channel.
+
+The client is more than just a data holder—it’s an active participant in the server’s functionality, ensuring that all communication happens as expected and that the user experience remains seamless and enjoyable.
+
+## Responding to messages
+
+So now that you understand the basic structure of the project, I want to give you a hand with responding to certain messages, as it’s not always clear…
+
+I recommend reading up on the IRCv3 specification, instead of the [RFC1459](https://tools.ietf.org/html/rfc1459), [RFC2812](https://tools.ietf.org/html/rfc2812) of [RFC7194](https://tools.ietf.org/html/rfc7194) specs, which are relatively outdated. Not that the old RFC won’t work, but simply because you may waste time decoding messages from clients that follow the new protocol.
+
+The next thing I recommend, is to connect to Libera Chat—the most popular public IRC server—with `netcat`. As you do this, you can replicate their behaviour instead of constantly relying on the RFC to explain the commands (as again: it’s not always clear).
+
+## Which client should I use?
+
+There are many clients to choose from, but by far the best one we found was [Halloy](https://halloy.squidowl.org/). It’s cross-platform, reliable, simple, and easy to configure. The only downside is that you need Cargo to run it at 42, which may not be available. Another option is [irssi](https://irssi.org/), but again it requires some dependancies to get up and running.
+
+## Common Mistakes
+
+- Be careful to properly broadcast each event that other clients need to see (when someone joins/leaves a channel, if someone if kicked, or if the mode changes)
+- `JOIN #chan1,#chan2,#chan3 pass1,pass2`
+- What if `username`, `nickname` and `realname` were all different?
+- Make sure to test the `+k` mode properly!
+- Why do I have a `@` prefixed to my nickname?
+
+## Additional Resources
+
+- [Modern IRCv3 Specification](https://modern.ircdocs.horse/)
+- [Blocking vs Non-Blocking Sockets via Stack Overflow](https://stackoverflow.com/questions/10654286/why-should-i-use-non-blocking-or-blocking-sockets)
+- [Libera Chat](https://libera.chat/)
