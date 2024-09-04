@@ -1,84 +1,132 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
-import Meta from '@/components/meta.astro';
+import { type CollectionEntry, getCollection } from "astro:content";
+import Meta from "@/components/meta.astro";
 import dayjs from "dayjs";
 
 export async function getStaticPaths() {
-	const posts = await getCollection('posts');
+    const posts = await getCollection("posts");
 
-	return posts.map((post) => ({
-		params: { slug: post.slug },
-		props: post,
-	}));
+    return posts.map((post) => ({
+        params: { slug: post.slug },
+        props: post,
+    }));
 }
 
-type Props = CollectionEntry<'blog'>;
+type Props = CollectionEntry<"blog">;
 
 const post = Astro.props;
 const { Content } = await post.render();
 ---
 
 <html lang="en">
-	<head>
-		<Meta title="Reactive" description="A blog about programming concepts and technologies" slug={`/static/${post.slug}.png`} />
-	</head>
-  <body class="bg-neutral-100 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 antialiased">
-    <main class="w-full mx-auto md:max-w-2xl px-6 py-12 flex flex-col space-y-12">
-      <a href="/" class="w-min text-md font-semibold text-neutral-800 dark:text-neutral-200">
-				reactive.so
-			</a>
-      <div class="w-full flex flex-col space-y-6">
-        <div class="w-full flex flex-col space-y-2">
-          <h1 class="text-2xl font-semibold">
-            {post.data.title}
-          </h1>
-          <div class="flex items-center flex-wrap text-sm font-semibold text-neutral-500">
-            <span>
-              <time datetime={dayjs(post.data.createdAt).format("YYYY-MM-DD")}>
-                {dayjs(post.data.createdAt).format("DD/MM/YYYY")}
-              </time>
-            </span>
-            <span>&nbsp;•&nbsp;</span>
-            <address class="whitespace-nowrap not-italic underline">
-              <a href={`${post.data.author.url}?ref=reactive.so`} target="_blank" rel="noopener noreferrer">
-                {post.data.author.name}
-              </a>
-            </address>
-            {post.data.contributors.length > 0 && (
-              <>
-                <span>&nbsp;with&nbsp;</span>
-                {post.data.contributors.map((contributor, index) => (
-                  <>
-                    <address class="whitespace-nowrap not-italic underline">
-                      <a href={`${contributor.url}?ref=reactive.so`} target="_blank" rel="noopener noreferrer">
-                        {contributor.name}
-                      </a>
-                    </address>
-                    {index < post.data.contributors.length - 2 && <span>,&nbsp;</span>}
-                    {index === post.data.contributors.length - 2 && <span>&nbsp;and&nbsp;</span>}
-                  </> 
-                ))}
-              </>
-            )}
-          </div>
-        </div>
-        <article class="prose prose-neutral dark:prose-invert font-mono text-justify">
-          <div class="not-prose p-2 mb-6 border-y border-neutral-300 dark:border-neutral-700">
-            <span class="text-sm">
-              See a typo? See something missing?
-              <a
-                href={`https://github.com/herbievine/reactive.so/edit/main/src/content/posts/${post.slug}.mdx`}
-                target="_blank"
-                class="underline"
-                rel="noopener noreferrer"
-              >
-                Open a pull request in GitHub and be featured on this page!
-              </a>
-            </span>
-          </div>
-          <Content />
-        </article>
-      </div>
-    </main>
-  </body>
+    <head>
+        <Meta
+            title="Reactive"
+            description="A blog about programming concepts and technologies"
+            slug={`/static/${post.slug}.png`}
+        />
+    </head>
+    <body
+        class="bg-neutral-100 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 antialiased"
+    >
+        <main
+            class="w-full mx-auto md:max-w-2xl px-6 py-12 flex flex-col space-y-12"
+        >
+            <a
+                href="/"
+                class="w-min text-md font-semibold text-neutral-800 dark:text-neutral-200"
+            >
+                reactive.so
+            </a>
+            <div class="w-full flex flex-col space-y-6">
+                <div class="w-full flex flex-col space-y-2">
+                    <h1 class="text-2xl font-semibold">
+                        {post.data.title}
+                    </h1>
+                    <div
+                        class="flex items-center flex-wrap text-sm font-semibold text-neutral-500"
+                    >
+                        <span>
+                            <time
+                                datetime={dayjs(post.data.createdAt).format(
+                                    "YYYY-MM-DD",
+                                )}
+                            >
+                                {
+                                    dayjs(post.data.createdAt).format(
+                                        "DD/MM/YYYY",
+                                    )
+                                }
+                            </time>
+                        </span>
+                        <span>&nbsp;•&nbsp;</span>
+                        <address class="whitespace-nowrap not-italic underline">
+                            <a
+                                href={`${post.data.author.url}?ref=reactive.so`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {post.data.author.name}
+                            </a>
+                        </address>
+                        {
+                            post.data.contributors.length > 0 && (
+                                <>
+                                    <span>&nbsp;with&nbsp;</span>
+                                    {post.data.contributors.map(
+                                        (contributor, index) => (
+                                            <>
+                                                <address class="whitespace-nowrap not-italic underline">
+                                                    <a
+                                                        href={`${contributor.url}?ref=reactive.so`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                    >
+                                                        {contributor.name}
+                                                    </a>
+                                                </address>
+                                                {index <
+                                                    post.data.contributors
+                                                        .length -
+                                                        2 && (
+                                                    <span>,&nbsp;</span>
+                                                )}
+                                                {index ===
+                                                    post.data.contributors
+                                                        .length -
+                                                        2 && (
+                                                    <span>&nbsp;and&nbsp;</span>
+                                                )}
+                                            </>
+                                        ),
+                                    )}
+                                </>
+                            )
+                        }
+                    </div>
+                </div>
+                <article
+                    class="prose prose-neutral dark:prose-invert prose-pre:max-h-[600px] font-mono text-justify"
+                >
+                    <div
+                        class="not-prose py-2 mb-6 border-y border-neutral-300 dark:border-neutral-700"
+                    >
+                        <span class="text-sm">
+                            See a typo? See something missing?
+                            <a
+                                href={`https://github.com/herbievine/reactive.so/edit/main/src/content/posts/${post.slug}.mdx`}
+                                target="_blank"
+                                class="underline"
+                                rel="noopener noreferrer"
+                            >
+                                Open a pull request in GitHub and be featured on
+                                this page!
+                            </a>
+                        </span>
+                    </div>
+                    <Content />
+                </article>
+            </div>
+        </main>
+    </body>
 </html>
