@@ -23,4 +23,4 @@ jobs:
           python3 -m pip install --upgrade pip setuptools
           pip install codespell
       - name: Run codespell
-        run: codespell posts
+        run: codespell src/content/posts
