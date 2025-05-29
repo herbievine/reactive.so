@@ -7,5 +7,5 @@ import tailwind from "@astrojs/tailwind";
 export default defineConfig({
   site: "https://reactive.so",
   integrations: [mdx(), sitemap(), tailwind()],
-  trailingSlash: false
+  trailingSlash: "never",
 });
