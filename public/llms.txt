@@ -4,8 +4,8 @@
 
 ## Posts
 
-- [42: A Comprehensive Guide to Cub3D](https://reactive.so/post/42-a-comprehensive-guide-to-cub3d/): A comprehensive guide to the Cub3D project from 42.
-- [42: A Comprehensive Guide to ft_irc](https://reactive.so/post/42-a-comprehensive-guide-to-ft_irc/): A comprehensive guide to the ft_irc project from 42.
-- [42: A Comprehensive Guide to Pipex](https://reactive.so/post/42-a-comprehensive-guide-to-pipex/): A comprehensive guide to the Pipex project from 42.
-- [42: A Comprehensive Guide to So Long](https://reactive.so/post/42-a-comprehensive-guide-to-so_long/): A deep dive into the 42 project so_long, including the MLX library, parsing, and error handling.
-- [Streamlining 42 Project Management with 42 CLI and GitHub Actions](https://reactive.so/post/streamlining-42-project-management-with-42-cli-and-gh-actions/): An insigth into managing your 42 projects with 42-CLI.
+- [42: A Comprehensive Guide to Cub3D](https://reactive.so/post/42-a-comprehensive-guide-to-cub3d.md): A comprehensive guide to the Cub3D project from 42.
+- [42: A Comprehensive Guide to ft_irc](https://reactive.so/post/42-a-comprehensive-guide-to-ft_irc.md): A comprehensive guide to the ft_irc project from 42.
+- [42: A Comprehensive Guide to Pipex](https://reactive.so/post/42-a-comprehensive-guide-to-pipex.md): A comprehensive guide to the Pipex project from 42.
+- [42: A Comprehensive Guide to So Long](https://reactive.so/post/42-a-comprehensive-guide-to-so_long.md): A deep dive into the 42 project so_long, including the MLX library, parsing, and error handling.
+- [Streamlining 42 Project Management with 42 CLI and GitHub Actions](https://reactive.so/post/streamlining-42-project-management-with-42-cli-and-gh-actions.md): An insigth into managing your 42 projects with 42-CLI.
